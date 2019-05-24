@@ -12,6 +12,7 @@ public class Escolhas {
 		int numero_escolha;
 		public String texto_escolha;
 		ArrayList<Texture> imagens_escolhas = new ArrayList<Texture>();
+		String teste;
         
 	public Escolhas() {
 		this.nome_escolha = "Vazio"; 
