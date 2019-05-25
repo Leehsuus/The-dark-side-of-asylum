@@ -12,8 +12,9 @@ public class Escolhas {
 		int numero_escolha;
 		public String texto_escolha;
 		ArrayList<Texture> imagens_escolhas = new ArrayList<Texture>();
+		String teste;
         
-		public Escolhas() {
+	public Escolhas() {
 			this.nome_escolha = "Vazio"; 
 			texto_escolha = "Voce chega na ilha e decide:";
 			this.numero_escolha = 0;
@@ -578,4 +579,3 @@ public class Escolhas {
             }
         }
     }
-
