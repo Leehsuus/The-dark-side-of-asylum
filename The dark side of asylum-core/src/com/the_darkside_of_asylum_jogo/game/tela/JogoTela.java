@@ -27,8 +27,8 @@ public class JogoTela implements Screen {
 	public JogoTela(The_DarkSide_of_Asylum_Jogo jogo) {
 		this.jogo = jogo;
 		jogar = new Escolhas();
-		seta_baixo = new Texture(Gdx.files.internal("/home/leticia/eclipse-workspace/The dark side of asylum-core"
-				+ "/assets/Imagens/Menu/Seta_baixo.png"));
+		seta_baixo = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core"
+				+ "/assets/Imagens/Menu/Seta_baixo.png");
 		seta = new Rectangle();
 		seta.x = 150;
 		seta.y = 300;
