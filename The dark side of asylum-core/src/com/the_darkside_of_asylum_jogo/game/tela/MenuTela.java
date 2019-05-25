@@ -37,7 +37,7 @@ public class MenuTela implements Screen {
 	
 
 	
-	String local_musica = "/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Musica/From The Inside Lyrics.mp3";
+	String local_musica = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Musica/From The Inside Lyrics.mp3";
 	
 	Som som = new Som();
 	public static boolean tocando = true ; 
@@ -46,23 +46,24 @@ public class MenuTela implements Screen {
 	
 	public MenuTela(The_DarkSide_of_Asylum_Jogo jogo) {
 		this.jogo = jogo;
-		fundo_menu = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/Fundo do Menu.png");
+		fundo_menu = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Fundo do Menu.png");
 		
-		btn_jogar_pt = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/Jogar.png");
-		btn_idioma_pt = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/Idioma.png");
-		btn_historia_pt = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/Historia.png");
-		btn_jogar_en = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/Play.png");
-		btn_idioma_en = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/Language.png");
-		btn_historia_en = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/Story.png");
-		btn_pt = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/Portugues.png");
-		btn_eng = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/English.png");
-		seta_dir = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/Seta.png");
-		seta_esq = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/Seta e.png");
+		btn_jogar_pt = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Jogar.png");
+		btn_idioma_pt = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Idioma.png");
+		btn_historia_pt = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Historia.png");
+		btn_jogar_en = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Play.png");
+		btn_idioma_en = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Language.png");
+		btn_historia_en = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Story.png");
+		btn_pt = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Portugues.png");
+		btn_eng = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/English.png");
+		seta_dir = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Seta.png");
+		seta_esq = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Seta e.png");
 
 		//fundo_jogando_aux = fun 
-		btn_com_som = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/som.png");
-		btn_sem_som = new Texture("/home/leticia/eclipse-workspace/The dark side of asylum-core/assets/Imagens/Menu/sem_som.png");
+		btn_com_som = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/som.png");
+		btn_sem_som = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/sem_som.png");
 		btn_som_aux = btn_com_som;
+
 		btn_som = new Rectangle();
 		seta = new Rectangle();
 		//camera = new OrthographicCamera();
@@ -159,7 +160,7 @@ public class MenuTela implements Screen {
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && seta.y == 458) {
 			dispose();
 			jogo.setScreen(new JogoTela(jogo));
-			status_jogo = 0;
+			//status_jogo = 0;
 			
 		}
 	}
