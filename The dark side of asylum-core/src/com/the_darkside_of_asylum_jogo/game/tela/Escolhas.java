@@ -94,7 +94,7 @@ public class Escolhas {
 			this.matriz [7][3] = "Entrar no quarto da vítima";
 			this.matriz [7][4] = "Ir na ala dos enfermeiros";
 			this.matriz [7][5] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Fundo do Menu.png";
-			this.matriz [7][6] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Escolhas/3-1.png";
+			this.matriz [7][6] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Escolhas/13-3.png";
 			this.matriz [7][7] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Escolhas/14-1.png";
 			this.matriz [7][8] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Escolhas/14-3.png";
 			
@@ -294,7 +294,7 @@ public class Escolhas {
 			this.matriz [27][3] = "Vai até os médicos fazer mais perguntas sobre a vítima";
 			this.matriz [27][4] = "Vai até o suspeito";
 			this.matriz [27][5] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Fundo do Menu.png";
-			this.matriz [27][6] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Escolhas/9-2.png";
+			this.matriz [27][6] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Escolhas/15-1.png";
 			this.matriz [27][7] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Escolhas/12-1.png";
 			this.matriz [27][8] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Escolhas/12-2.png";
 			
