@@ -22,7 +22,7 @@ public class JogoTela implements Screen {
 	Rectangle seta;
 	boolean escolheu;
 	boolean chegou_ao_fim;
-	String texto_escolha;
+	Texture texto_escolha;
 
 	public JogoTela(The_DarkSide_of_Asylum_Jogo jogo) {
 		this.jogo = jogo;
@@ -31,14 +31,14 @@ public class JogoTela implements Screen {
 				+ "/assets/Imagens/Menu/Seta_baixo.png");
 		seta = new Rectangle();
 		seta.x = 150;
-		seta.y = 300;
+		seta.y = 270;
 		escolheu = true;
-		texto_escolha = jogar.texto_escolha;
+		texto_escolha = jogar.texto_aux;
 	}
 
 	public void desenhar() {
 		int pos_x_escolhas = 0;
-		int pos_y_escolhas = 220;
+		int pos_y_escolhas = 200;
 		if (escolheu == true) {
 			ArrayList<Texture> imagens_escolhas = new ArrayList<Texture>();
 			imagens_escolhas = jogar.Ponto_decisao();
@@ -51,6 +51,7 @@ public class JogoTela implements Screen {
 			jogo.lote.draw(escolha_um, pos_x_escolhas + 15, pos_y_escolhas, (escolha_um.getWidth()/2), (escolha_um.getHeight()/2));
 			jogo.lote.draw(escolha_dois, pos_x_escolhas + 365, pos_y_escolhas, (escolha_dois.getWidth()/2), (escolha_dois.getHeight()/2));
 			jogo.lote.draw(escolha_tres, pos_x_escolhas + 730 , pos_y_escolhas, (escolha_tres.getWidth()/2), (escolha_tres.getHeight()/2));
+			texto_escolha = jogar.texto_aux;
 			jogo.lote.end();
 			escolheu = false;
 		} else if (escolheu == false) {
@@ -60,8 +61,7 @@ public class JogoTela implements Screen {
 			jogo.lote.draw(escolha_dois, pos_x_escolhas + 365, pos_y_escolhas, (escolha_dois.getWidth()/2), (escolha_dois.getHeight()/2));
 			jogo.lote.draw(escolha_tres, pos_x_escolhas + 730 , pos_y_escolhas, (escolha_tres.getWidth()/2), (escolha_tres.getHeight()/2));
 			jogo.lote.draw(seta_baixo, seta.x, seta.y, (seta_baixo.getWidth()/2), (seta_baixo.getHeight()/2));
-			//jogo.fonte.setColor(0, 0, 0, 1);
-			jogo.fonte.draw(jogo.lote, texto_escolha, 10, 550);
+			jogo.lote.draw(texto_escolha, 50, 330);
 			jogo.lote.end();
 		}
 	}
@@ -77,19 +77,16 @@ public class JogoTela implements Screen {
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && seta.x == 150) {
 			jogar.Mostrar_opcoes(1);
 			chegou_ao_fim = jogar.Consultar_texto();
-			texto_escolha = jogar.texto_escolha;
 			escolheu = true;
 		}
 		else if (Gdx.input.isKeyJustPressed(Keys.ENTER) && seta.x == 515) {
 			jogar.Mostrar_opcoes(2);
 			chegou_ao_fim = jogar.Consultar_texto();
-			texto_escolha = jogar.texto_escolha;
 			escolheu = true;
 		}
 		else if(Gdx.input.isKeyJustPressed(Keys.ENTER) && seta.x == 880) {
 			jogar.Mostrar_opcoes(3);
-			chegou_ao_fim = jogar.Consultar_texto();
-			texto_escolha = jogar.texto_escolha;
+			chegou_ao_fim = jogar.Consultar_texto();			
 			escolheu = true;
 		}
 	}
