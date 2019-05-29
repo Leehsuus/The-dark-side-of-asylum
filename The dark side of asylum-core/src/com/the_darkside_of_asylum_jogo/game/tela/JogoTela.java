@@ -12,6 +12,7 @@ import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 import com.the_darkside_of_asylum_jogo.game.tela.Escolhas;
 
 public class JogoTela implements Screen {
+	//Escolhas
 	private The_DarkSide_of_Asylum_Jogo jogo;
 	Escolhas jogar;
 	Texture fundo_jogo;
@@ -24,6 +25,15 @@ public class JogoTela implements Screen {
 	boolean chegou_ao_fim;
 	Texture texto_escolha;
 
+	//Interatividade
+	Heroi jogador;
+	boolean teclasOpostas = false;
+	NPC npc1;
+	Thread thread1;
+
+	//Maquina de estado
+	public int estado;
+
 	public JogoTela(The_DarkSide_of_Asylum_Jogo jogo) {
 		this.jogo = jogo;
 		jogar = new Escolhas();
@@ -34,6 +44,14 @@ public class JogoTela implements Screen {
 		seta.y = 270;
 		escolheu = true;
 		texto_escolha = jogar.texto_aux;
+
+		//Interatividade
+		jogador = new Heroi(this,"/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Personagens/poke.png");
+		npc1 = new NPC(this,"/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Personagens/poke.png");
+		thread1 = new Thread(npc1);
+
+		//Maquina de estado
+		estado = 1;
 	}
 
 	public void desenhar() {
@@ -65,7 +83,7 @@ public class JogoTela implements Screen {
 			jogo.lote.end();
 		}
 	}
-	
+
 	public void escolher() {
 		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (seta.x == 150 || seta.x == 515)) {
 			seta.x += 365;
@@ -73,22 +91,57 @@ public class JogoTela implements Screen {
 		if (Gdx.input.isKeyJustPressed(Keys.LEFT) && (seta.x == 515 || seta.x == 880)) {
 			seta.x -= 365;
 		}
-		
+
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && seta.x == 150) {
+			estado = 2;
+			thread1.start();
 			jogar.Mostrar_opcoes(1);
 			chegou_ao_fim = jogar.Consultar_texto();
 			escolheu = true;
 		}
 		else if (Gdx.input.isKeyJustPressed(Keys.ENTER) && seta.x == 515) {
+			estado = 2;
+			thread1.start();
 			jogar.Mostrar_opcoes(2);
 			chegou_ao_fim = jogar.Consultar_texto();
 			escolheu = true;
 		}
 		else if(Gdx.input.isKeyJustPressed(Keys.ENTER) && seta.x == 880) {
+			estado = 2;
+			thread1.start();
 			jogar.Mostrar_opcoes(3);
 			chegou_ao_fim = jogar.Consultar_texto();			
 			escolheu = true;
 		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public void movimentosPersonagem() {
+		if(Gdx.input.isKeyPressed(Keys.DOWN) && !teclasOpostas)  {
+			jogador.andarParaBaixo();
+		}
+		if(Gdx.input.isKeyPressed(Keys.LEFT) && !teclasOpostas) {
+			jogador.andarParaEsquerda();
+		}
+		if(Gdx.input.isKeyPressed(Keys.RIGHT) && !teclasOpostas) {
+			jogador.andarParaDireta();
+		}
+		if(Gdx.input.isKeyPressed(Keys.UP) && !teclasOpostas) {
+			jogador.andarParaCima();
+		}
+
+		if ((Gdx.input.isKeyPressed(Keys.LEFT) && Gdx.input.isKeyPressed(Keys.RIGHT)) || Gdx.input.isKeyPressed(Keys.UP) && Gdx.input.isKeyPressed(Keys.DOWN)){
+			teclasOpostas = true;
+		}
+		else {
+			teclasOpostas = false;
+		}
+
+		if(Gdx.input.isKeyPressed(Keys.SPACE)) {
+			estado = 1;
+			thread1.stop();
+		}
+
 	}
 
 	@Override
@@ -98,11 +151,26 @@ public class JogoTela implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		desenhar();
-		if (escolheu == false) {
-			escolher();
+		if (estado == 1) {
+			Gdx.gl.glClearColor(0, 0, 0, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			desenhar();
+			if (escolheu == false) {
+				escolher();
+			}
+		}
+		else {
+			movimentosPersonagem();
+			npc1.setDelta(delta);
+			jogador.setEstadoTempo(jogador.getEstadoTempo() + delta);
+
+			Gdx.gl.glClearColor(0.2f, 0.5f, 0.2f, 1);
+			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+			jogo.lote.begin();
+			jogo.lote.draw(jogador.getFrame(delta), jogador.getX(), jogador.getY(), jogador.LARGURA_PERSONAGEM, jogador.ALTURA_PERSONAGEM);
+			jogo.lote.draw(npc1.getFrame(delta), npc1.getX(), npc1.getY(), npc1.LARGURA_PERSONAGEM, npc1.ALTURA_PERSONAGEM);
+			jogo.lote.end();
 		}
 
 	}
