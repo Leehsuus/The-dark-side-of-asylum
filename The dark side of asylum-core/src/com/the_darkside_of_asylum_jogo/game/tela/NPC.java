@@ -9,6 +9,7 @@ public class NPC extends Personagens implements Runnable{
 	private float y;
 	String direcao;
 	float delta;
+	String teste;
 
 	public NPC(JogoTela tela, String caminho) {
 		super(tela, caminho);
