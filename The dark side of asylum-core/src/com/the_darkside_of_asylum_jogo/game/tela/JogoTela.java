@@ -9,137 +9,230 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
-import com.the_darkside_of_asylum_jogo.game.tela.Escolhas;
 
 public class JogoTela implements Screen {
-	//Escolhas
 	private The_DarkSide_of_Asylum_Jogo jogo;
-	Escolhas jogar;
-	Texture fundo_jogo;
-	Texture escolha_um;
-	Texture escolha_dois;
-	Texture escolha_tres;
-	Texture seta_baixo;
-	Rectangle seta;
-	boolean escolheu;
-	boolean chegou_ao_fim;
-	Texture texto_escolha;
+	//escolhas
+	private Escolhas jogar;
+	private Texture fundo_jogo;
+	private Texture escolha_um;
+	private Texture escolha_dois;
+	private Texture escolha_tres;
+	private Texture seta_baixo;
+	private Rectangle seta;
+	private boolean escolheu;
+	private boolean chegou_ao_fim;
+	private Texture texto_escolha;
 
-	//Interatividade
-	Heroi jogador;
-	boolean teclasOpostas = false;
-	NPC npc1;
-	Thread thread1;
+	//interatividade
+	private Heroi jogador;
+	private Thread threadJogador;
+	public static String direcaoYJogador;
+	public static String direcaoXJogador;
+	private boolean teclasOpostas;
 
-	//Maquina de estado
+	private NPC npc1;
+	private Thread threadNpc;
+
+	private Objetos mesa;
+
+	private String startado;
+
+	//maquina de estado
 	public int estado;
 
-	public JogoTela(The_DarkSide_of_Asylum_Jogo jogo) {
-		this.jogo = jogo;
-		jogar = new Escolhas();
+	public JogoTela(The_DarkSide_of_Asylum_Jogo jogoP) {
+		//escolhas
+		this.jogo = jogoP;
+		this.jogar = new Escolhas();
 		seta_baixo = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core"
 				+ "/assets/Imagens/Menu/Seta_baixo.png");
-		seta = new Rectangle();
-		seta.x = 150;
-		seta.y = 270;
-		escolheu = true;
-		texto_escolha = jogar.texto_aux;
+		this.seta = new Rectangle();
+		this.seta.x = 150;
+		this.seta.y = 270;
+		this.escolheu = true;
+		this.texto_escolha = jogar.texto_aux;
 
-		//Interatividade
-		jogador = new Heroi(this,"/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Personagens/poke.png");
-		npc1 = new NPC(this,"/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Personagens/poke.png");
-		thread1 = new Thread(npc1);
+		//interatividade
+		this.jogador = new Heroi(this,"/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Personagens/poke.png", 40,36, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		this.threadJogador = new Thread(jogador);
+		this.npc1 = new NPC(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Personagens/poke.png","L", 40, 36, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		this.threadNpc = new Thread(npc1);
+		this.mesa = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Personagens/poke.png", 40, 36, Gdx.graphics.getHeight());
+		this.setTeclasOpostas(false);
+		this.setStartado("n");
+		//maquina de estado
+		this.setEstado(1);
 
-		//Maquina de estado
-		estado = 1;
 	}
 
-	public void desenhar() {
+	public boolean isTeclasOpostas() {
+		return teclasOpostas;
+	}
+
+	public void setTeclasOpostas(boolean teclasOpostasP) {
+		this.teclasOpostas = teclasOpostasP;
+	}
+
+	public int getEstado() {
+		return estado;
+	}
+
+	public void setEstado(int estadoP) {
+		this.estado = estadoP;
+	}
+
+	public String getStartado() {
+		return startado;
+	}
+
+	public void setStartado(String startadoP) {
+		this.startado = startadoP;
+	}
+
+	public void desenharEscolhas() {
 		int pos_x_escolhas = 0;
 		int pos_y_escolhas = 200;
-		if (escolheu == true) {
+		if (this.escolheu == true && this.chegou_ao_fim == false) {
 			ArrayList<Texture> imagens_escolhas = new ArrayList<Texture>();
-			imagens_escolhas = jogar.Ponto_decisao();
-			fundo_jogo = imagens_escolhas.get(0);
-			escolha_um = imagens_escolhas.get(1);
-			escolha_dois = imagens_escolhas.get(2);
-			escolha_tres = imagens_escolhas.get(3);
-			jogo.lote.begin();
-			jogo.lote.draw(fundo_jogo, pos_x_escolhas, 0);
-			jogo.lote.draw(escolha_um, pos_x_escolhas + 15, pos_y_escolhas, (escolha_um.getWidth()/2), (escolha_um.getHeight()/2));
-			jogo.lote.draw(escolha_dois, pos_x_escolhas + 365, pos_y_escolhas, (escolha_dois.getWidth()/2), (escolha_dois.getHeight()/2));
-			jogo.lote.draw(escolha_tres, pos_x_escolhas + 730 , pos_y_escolhas, (escolha_tres.getWidth()/2), (escolha_tres.getHeight()/2));
-			texto_escolha = jogar.texto_aux;
-			jogo.lote.end();
-			escolheu = false;
-		} else if (escolheu == false) {
-			jogo.lote.begin();
-			jogo.lote.draw(fundo_jogo, pos_x_escolhas, 0);
-			jogo.lote.draw(escolha_um, pos_x_escolhas + 15, pos_y_escolhas, (escolha_um.getWidth()/2), (escolha_um.getHeight()/2));
-			jogo.lote.draw(escolha_dois, pos_x_escolhas + 365, pos_y_escolhas, (escolha_dois.getWidth()/2), (escolha_dois.getHeight()/2));
-			jogo.lote.draw(escolha_tres, pos_x_escolhas + 730 , pos_y_escolhas, (escolha_tres.getWidth()/2), (escolha_tres.getHeight()/2));
-			jogo.lote.draw(seta_baixo, seta.x, seta.y, (seta_baixo.getWidth()/2), (seta_baixo.getHeight()/2));
-			jogo.lote.draw(texto_escolha, 50, 330);
-			jogo.lote.end();
+			imagens_escolhas = this.jogar.Ponto_decisao();
+			this.fundo_jogo = imagens_escolhas.get(0);
+			this.escolha_um = imagens_escolhas.get(1);
+			this.escolha_dois = imagens_escolhas.get(2);
+			this.escolha_tres = imagens_escolhas.get(3);
+			this.jogo.lote.begin();
+			this.jogo.lote.draw(this.fundo_jogo, pos_x_escolhas, 0);
+			this.jogo.lote.draw(this.escolha_um, pos_x_escolhas + 15, pos_y_escolhas, (this.escolha_um.getWidth()/2), (this.escolha_um.getHeight()/2));
+			this.jogo.lote.draw(this.escolha_dois, pos_x_escolhas + 365, pos_y_escolhas, (this.escolha_dois.getWidth()/2), (this.escolha_dois.getHeight()/2));
+			this.jogo.lote.draw(this.escolha_tres, pos_x_escolhas + 730 , pos_y_escolhas, (this.escolha_tres.getWidth()/2), (this.escolha_tres.getHeight()/2));
+			this.texto_escolha = this.jogar.texto_aux;
+			this.jogo.lote.end();
+			this.escolheu = false;
+		} else if (this.escolheu == false && this.chegou_ao_fim == false) {
+			this.jogo.lote.begin();
+			this.jogo.lote.draw(this.fundo_jogo, pos_x_escolhas, 0);
+			this.jogo.lote.draw(this.escolha_um, pos_x_escolhas + 15, pos_y_escolhas, (this.escolha_um.getWidth()/2), (this.escolha_um.getHeight()/2));
+			this.jogo.lote.draw(this.escolha_dois, pos_x_escolhas + 365, pos_y_escolhas, (this.escolha_dois.getWidth()/2), (this.escolha_dois.getHeight()/2));
+			this.jogo.lote.draw(this.escolha_tres, pos_x_escolhas + 730 , pos_y_escolhas, (this.escolha_tres.getWidth()/2), (this.escolha_tres.getHeight()/2));
+			this.jogo.lote.draw(this.seta_baixo,this.seta.x, this.seta.y, (this.seta_baixo.getWidth()/2), (this.seta_baixo.getHeight()/2));
+			this.jogo.lote.draw(this.texto_escolha, 50, 330);
+			this.jogo.lote.end();
 		}
 	}
 
-	public void escolher() {
-		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (seta.x == 150 || seta.x == 515)) {
-			seta.x += 365;
+	public void desenharIteratividade(float deltaP) {
+		this.jogo.lote.begin();
+		this.jogo.lote.draw(this.mesa.getImagem(),this. mesa.getPosX(), this.mesa.getPosY(), this.mesa.larguraItem, this.mesa.alturaItem);
+		if( this.jogador.getPosY() >= this.npc1.getPosY()) {
+			this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+			this.jogo.lote.draw(this.npc1.getImagem(deltaP), this.npc1.getPosX(), this.npc1.getPosY(), this.npc1.larguraPersonagem, this.npc1.alturaPersonagem);
 		}
-		if (Gdx.input.isKeyJustPressed(Keys.LEFT) && (seta.x == 515 || seta.x == 880)) {
-			seta.x -= 365;
+		else {
+			this.jogo.lote.draw(this.npc1.getImagem(deltaP), this.npc1.getPosX(), this.npc1.getPosY(), this.npc1.larguraPersonagem, this.npc1.alturaPersonagem);
+			this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
 		}
-
-		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && seta.x == 150) {
-			estado = 2;
-			thread1.start();
-			jogar.Mostrar_opcoes(1);
-			chegou_ao_fim = jogar.Consultar_texto();
-			escolheu = true;
-		}
-		else if (Gdx.input.isKeyJustPressed(Keys.ENTER) && seta.x == 515) {
-			estado = 2;
-			thread1.start();
-			jogar.Mostrar_opcoes(2);
-			chegou_ao_fim = jogar.Consultar_texto();
-			escolheu = true;
-		}
-		else if(Gdx.input.isKeyJustPressed(Keys.ENTER) && seta.x == 880) {
-			estado = 2;
-			thread1.start();
-			jogar.Mostrar_opcoes(3);
-			chegou_ao_fim = jogar.Consultar_texto();			
-			escolheu = true;
-		}
+		this.jogo.lote.end();
 	}
 
 	@SuppressWarnings("deprecation")
-	public void movimentosPersonagem() {
-		if(Gdx.input.isKeyPressed(Keys.DOWN) && !teclasOpostas)  {
-			jogador.andarParaBaixo();
+	public void escolher() {
+		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (this.seta.x == 150 || this.seta.x == 515)) {
+			this.seta.x += 365;
 		}
-		if(Gdx.input.isKeyPressed(Keys.LEFT) && !teclasOpostas) {
-			jogador.andarParaEsquerda();
+		if (Gdx.input.isKeyJustPressed(Keys.LEFT) && (this.seta.x == 515 || this.seta.x == 880)) {
+			this.seta.x -= 365;
 		}
-		if(Gdx.input.isKeyPressed(Keys.RIGHT) && !teclasOpostas) {
-			jogador.andarParaDireta();
+
+		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 150) {
+			if (this.chegou_ao_fim) {
+				this.setEstado(1);
+			}
+			else{
+				this.setEstado(2);
+			}
+
+			if (this.getStartado() == "n") {
+				this.threadNpc.start();
+				this.threadJogador.start();
+				this.setStartado("s");;
+			}
+			else if (this.getStartado() == "s") {
+				this.threadNpc.resume();
+			}
+			this.jogar.Mostrar_opcoes(1);
+			this.chegou_ao_fim = this.jogar.Consultar_texto();
+			this.escolheu = true;
 		}
-		if(Gdx.input.isKeyPressed(Keys.UP) && !teclasOpostas) {
-			jogador.andarParaCima();
+		else if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 515) {
+			if (this.chegou_ao_fim) {
+				this.setEstado(1);
+			}
+			else{
+				this.setEstado(2);
+			}
+
+			if (this.getStartado() == "n") {
+				this.threadJogador.start();
+				this.threadNpc.start();
+				this.setStartado("s");
+			}
+			else if (this.getStartado() == "s") {
+				this.threadNpc.resume();
+			}
+			this.jogar.Mostrar_opcoes(2);
+			this.chegou_ao_fim = jogar.Consultar_texto();
+			this.escolheu = true;
+		}
+		else if(Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 880) {
+			if (this.chegou_ao_fim) {
+				this.setEstado(1);
+			}
+			else{
+				this.setEstado(2);
+			}
+			if (this.getStartado() == "n") {
+				this.threadJogador.start();
+				this.threadNpc.start();
+				this.setStartado("s");
+			}
+			else if (this.getStartado() == "s") {
+				this.threadNpc.resume();
+			}
+			this.jogar.Mostrar_opcoes(3);
+			this.chegou_ao_fim = this.jogar.Consultar_texto();			
+			this.escolheu = true;
+		}
+	}
+
+	public void capturarMovimentosHeroi() {
+		if(Gdx.input.isKeyPressed(Keys.DOWN) && !this.isTeclasOpostas())  {
+			this.direcaoYJogador = "Baixo";
+		}else if(Gdx.input.isKeyPressed(Keys.UP) && !this.isTeclasOpostas()) {
+			this.direcaoYJogador = "Cima";
+		}else {
+			this.direcaoYJogador ="";
+		}
+
+		if(Gdx.input.isKeyPressed(Keys.LEFT) && !this.isTeclasOpostas()) {
+			this.direcaoXJogador = "Esquerda";
+		}
+		else  if(Gdx.input.isKeyPressed(Keys.RIGHT) && !this.isTeclasOpostas()) {
+			this.direcaoXJogador = "Direita";
+		}
+		else {
+			this.direcaoXJogador ="";
 		}
 
 		if ((Gdx.input.isKeyPressed(Keys.LEFT) && Gdx.input.isKeyPressed(Keys.RIGHT)) || Gdx.input.isKeyPressed(Keys.UP) && Gdx.input.isKeyPressed(Keys.DOWN)){
-			teclasOpostas = true;
+			this.setTeclasOpostas(true);
 		}
 		else {
-			teclasOpostas = false;
+			this.setTeclasOpostas(false);
 		}
 
 		if(Gdx.input.isKeyPressed(Keys.SPACE)) {
-			estado = 1;
-			thread1.stop();
+			this.setEstado(1);
+			this.threadNpc.suspend();
 		}
 
 	}
@@ -151,26 +244,22 @@ public class JogoTela implements Screen {
 
 	@Override
 	public void render(float delta) {
-		if (estado == 1) {
+		if (this.getEstado() == 1) {
 			Gdx.gl.glClearColor(0, 0, 0, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			desenhar();
-			if (escolheu == false) {
-				escolher();
+			this.desenharEscolhas();
+			if (this.escolheu == false) {
+				this.escolher();
 			}
 		}
 		else {
-			movimentosPersonagem();
-			npc1.setDelta(delta);
-			jogador.setEstadoTempo(jogador.getEstadoTempo() + delta);
+			this.capturarMovimentosHeroi();
+			this.npc1.setDelta(delta);
+			this.jogador.setDelta(delta);
 
 			Gdx.gl.glClearColor(0.2f, 0.5f, 0.2f, 1);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-			jogo.lote.begin();
-			jogo.lote.draw(jogador.getFrame(delta), jogador.getX(), jogador.getY(), jogador.LARGURA_PERSONAGEM, jogador.ALTURA_PERSONAGEM);
-			jogo.lote.draw(npc1.getFrame(delta), npc1.getX(), npc1.getY(), npc1.LARGURA_PERSONAGEM, npc1.ALTURA_PERSONAGEM);
-			jogo.lote.end();
+			this.desenharIteratividade(delta);
 		}
 
 	}
@@ -201,9 +290,8 @@ public class JogoTela implements Screen {
 
 	@Override
 	public void dispose() {
-		jogo.lote.dispose();
-		jogo.fonte.dispose();
-
+		this.jogo.lote.dispose();
+		this.jogo.fonte.dispose();
 	}
 
 }

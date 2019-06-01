@@ -1,100 +1,145 @@
 package com.the_darkside_of_asylum_jogo.game.tela;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
-import com.the_darkside_of_asylum_jogo.game.tela.JogoTela;
 
-public class Personagens {
-	public enum Estado {PARADO, CORRENDO}
-	public Estado estadoAtual;
-	public Estado estadoAnterior;
+public class Personagens{
 
-	public static final float VELOCIDADE = 300;
-	public static final float VELOCIDADE_ANIMACAO_PERSONAGEM = 0.2f;
+	protected enum Estado {PARADO, CORRENDO}
+	protected Estado estadoAtual;
+	protected Estado estadoAnterior;
 
-	public static final int LARGURA_PERSONAGEM_PIXEL = 40;
-	public static final int ALTURA_PERSONAGEM_PIXEL = 36;
+	protected static final float VELOCIDADE = 300;
+	protected static final float VELOCIDADE_ANIMACAO_PERSONAGEM = 0.2f;
 
-	public static final int LARGURA_PERSONAGEM = LARGURA_PERSONAGEM_PIXEL * 2;
-	public static final int ALTURA_PERSONAGEM = ALTURA_PERSONAGEM_PIXEL * 2;
+	protected Animation<TextureRegion>[] rolosImagemPersonagemAndando;
+	protected TextureRegion[] imagemPersonagemParado;
+	protected int roloImagem;
 
-	Animation<TextureRegion>[] rolosPersonagemAndando;
-	TextureRegion[] personagemParado;
+	protected float posX;
+	protected float posY;
+	public static int larguraPersonagem;
+	public static int alturaPersonagem;
+	
+	protected float estadoTempo;
+	
+	protected JogoTela tela;
+	protected static int limiteLarguraTela;
+	protected static int limiteAlturaTela;
 
-	float x;
-	int rolo;
-	float estadoTempo;
-	JogoTela tela;
+	public Personagens(JogoTela telaP, String caminhoP, float posYP, int larguraPersonagemPixelP,int  alturaPersonagemPixelP,int limiteLarguraTelaP,int limiteAlturaTelaP) {
+		this.larguraPersonagem = larguraPersonagemPixelP * 2;
+		this.alturaPersonagem = alturaPersonagemPixelP * 2;
+		this.tela = telaP;
+		this.limiteLarguraTela = limiteLarguraTelaP;  
+		this.limiteAlturaTela = limiteAlturaTelaP;
+		this.setPosX(The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - larguraPersonagem /2); 
+		this.setPosY(posYP); 
 
-	public Personagens(JogoTela tela, String caminho) {
-		this.tela = tela;
-		x = The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - LARGURA_PERSONAGEM /2; 
+		this.setRoloImagem(0);
+		this.rolosImagemPersonagemAndando = new Animation[4];
+		this.imagemPersonagemParado = new TextureRegion[4];
 
-		rolo = 0;
-		rolosPersonagemAndando = new Animation[4];
-		personagemParado = new TextureRegion[4];
+		TextureRegion[][] roloSpriteSheet = TextureRegion.split(new Texture(caminhoP), larguraPersonagemPixelP, alturaPersonagemPixelP);
 
-		TextureRegion[][] roloSpriteSheet = TextureRegion.split(new Texture(caminho), LARGURA_PERSONAGEM_PIXEL, ALTURA_PERSONAGEM_PIXEL);
+		this.rolosImagemPersonagemAndando[0] = new Animation(VELOCIDADE_ANIMACAO_PERSONAGEM, roloSpriteSheet[0]);
+		this.rolosImagemPersonagemAndando[1] = new Animation(VELOCIDADE_ANIMACAO_PERSONAGEM, roloSpriteSheet[1]);
+		this.rolosImagemPersonagemAndando[2] = new Animation(VELOCIDADE_ANIMACAO_PERSONAGEM, roloSpriteSheet[2]);
+		this.rolosImagemPersonagemAndando[3] = new Animation(VELOCIDADE_ANIMACAO_PERSONAGEM, roloSpriteSheet[3]);
 
-		rolosPersonagemAndando[0] = new Animation(VELOCIDADE_ANIMACAO_PERSONAGEM, roloSpriteSheet[0]);
-		rolosPersonagemAndando[1] = new Animation(VELOCIDADE_ANIMACAO_PERSONAGEM, roloSpriteSheet[1]);
-		rolosPersonagemAndando[2] = new Animation(VELOCIDADE_ANIMACAO_PERSONAGEM, roloSpriteSheet[2]);
-		rolosPersonagemAndando[3] = new Animation(VELOCIDADE_ANIMACAO_PERSONAGEM, roloSpriteSheet[3]);
-
-		personagemParado[0] = new TextureRegion(new Texture(caminho), LARGURA_PERSONAGEM_PIXEL * 2, 0, LARGURA_PERSONAGEM_PIXEL, ALTURA_PERSONAGEM_PIXEL);
-		personagemParado[1] = new TextureRegion(new Texture(caminho), LARGURA_PERSONAGEM_PIXEL * 2, ALTURA_PERSONAGEM_PIXEL, LARGURA_PERSONAGEM_PIXEL, ALTURA_PERSONAGEM_PIXEL);
-		personagemParado[2] = new TextureRegion(new Texture(caminho), LARGURA_PERSONAGEM_PIXEL * 2, ALTURA_PERSONAGEM_PIXEL * 2, LARGURA_PERSONAGEM_PIXEL, ALTURA_PERSONAGEM_PIXEL);
-		personagemParado[3] = new TextureRegion(new Texture(caminho), LARGURA_PERSONAGEM_PIXEL * 2, ALTURA_PERSONAGEM_PIXEL * 3, LARGURA_PERSONAGEM_PIXEL, ALTURA_PERSONAGEM_PIXEL);
+		this.imagemPersonagemParado[0] = new TextureRegion(new Texture(caminhoP), larguraPersonagemPixelP * 2, 0, larguraPersonagemPixelP, alturaPersonagemPixelP);
+		this.imagemPersonagemParado[1] = new TextureRegion(new Texture(caminhoP), larguraPersonagemPixelP * 2, alturaPersonagemPixelP, larguraPersonagemPixelP, alturaPersonagemPixelP);
+		this.imagemPersonagemParado[2] = new TextureRegion(new Texture(caminhoP), larguraPersonagemPixelP * 2, alturaPersonagemPixelP * 2, larguraPersonagemPixelP, alturaPersonagemPixelP);
+		this.imagemPersonagemParado[3] = new TextureRegion(new Texture(caminhoP), larguraPersonagemPixelP * 2, alturaPersonagemPixelP * 3, larguraPersonagemPixelP, alturaPersonagemPixelP);
 	}
 
-
-	public float getX() {
-		return x;
+	public static float getVelocidade() {
+		return VELOCIDADE;
+	}
+	
+	public int getRoloImagem() {
+		return roloImagem;
 	}
 
-	public void setX(float x) {
-		this.x = x;
+	public void setRoloImagem(int roloImagemP) {
+		this.roloImagem = roloImagemP;
+	}
+	
+	public float getPosX() {
+		return posX;
 	}
 
-
-	public int getRolo() {
-		return rolo;
+	public void setPosX(float posXP) {
+		this.posX = posXP;
 	}
 
-	public void setRolo(int rolo) {
-		this.rolo = rolo;
+	public float getPosY() {
+		return posY;
 	}
 
+	public void setPosY(float posYP) {
+		this.posY = posYP;
+	}
+	
+	public int getLarguraPersonagem () {
+		return larguraPersonagem;
+	}
+	
+	public int getAlturaPersonagem () {
+		return alturaPersonagem;
+	}
+	
 	public float getEstadoTempo() {
 		return estadoTempo;
 	}
 
-	public void setEstadoTempo(float estadoTempo) {
-		this.estadoTempo = estadoTempo;
+	public void setEstadoTempo(float estadoTempoP) {
+		this.estadoTempo = estadoTempoP;
 	}
 
 	public void andarParaEsquerda() {
-		if( this.getX() > 0) {
-			this.setX(this.getX() - this.VELOCIDADE * Gdx.graphics.getDeltaTime());
+		if( this.getPosX() > 0) {
+			this.setPosX(this.getPosX() - this.getVelocidade() * Gdx.graphics.getDeltaTime());
 		}
-		else if(this.getX() <= 0){
-			this.setX(0);
+		else if(this.getPosX() <= 0){
+			this.setPosX(0);
 		}
-		this.setRolo(1);
+		this.setRoloImagem(1);
 	}
 
-	public void andarParaDireta() {
-		if(this.getX() + 100 < The_DarkSide_of_Asylum_Jogo.LARGURA_TELA ) {
-			this.setX(this.getX() + this.VELOCIDADE * Gdx.graphics.getDeltaTime());
+	public void andarParaDireita() {
+		if(this.getPosX() + 100 < The_DarkSide_of_Asylum_Jogo.LARGURA_TELA ) {
+			this.setPosX(this.getPosX() + this.getVelocidade() * Gdx.graphics.getDeltaTime());
 		}
-		else if(this.getX() + 100 >= The_DarkSide_of_Asylum_Jogo.LARGURA_TELA ){
-			this.setX(Gdx.graphics.getWidth() - LARGURA_PERSONAGEM);
+		else if(this.getPosX() + 100 >= The_DarkSide_of_Asylum_Jogo.LARGURA_TELA ){
+			this.setPosX(limiteLarguraTela - larguraPersonagem);
 		}
-		this.setRolo(2);
+		this.setRoloImagem(2);
+	}
+	
+	public void andarParaCima() {
+		if(this.getPosY() + alturaPersonagem < The_DarkSide_of_Asylum_Jogo.ALTURA_TELA ) {
+			this.setPosY(this.getPosY() + this.getVelocidade() * Gdx.graphics.getDeltaTime());
+		}
+		else if(this.getPosY() + alturaPersonagem >= The_DarkSide_of_Asylum_Jogo.ALTURA_TELA ) {
+			this.setPosY(limiteAlturaTela  - alturaPersonagem);
+		}
+		this.setRoloImagem(3);
+
 	}
 
+	public void andarParaBaixo() {
+		if( this.getPosY()  > 0) {
+			this.setPosY(this.getPosY() - this.getVelocidade() * Gdx.graphics.getDeltaTime());
+		}
+		else if ( this.getPosY()  <= 0){
+			this.setPosY(0);
+		}
+		this.setRoloImagem(0);
+
+	}
+	
 }

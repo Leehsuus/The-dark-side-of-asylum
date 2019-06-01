@@ -1,76 +1,89 @@
 package com.the_darkside_of_asylum_jogo.game.tela;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.the_darkside_of_asylum_jogo.game.tela.JogoTela;
 
 public class NPC extends Personagens implements Runnable{
 
-	private float y;
-	String direcao;
-	float delta;
-	String teste;
+	private String qualNpc;
+	
+	private String direcao;
+	private Random aleatorio = new Random();
+	private int direcaoAleatorio;
+	
+	private float delta;
 
-	public NPC(JogoTela tela, String caminho) {
-		super(tela, caminho);
-		y = Gdx.graphics.getHeight() - ALTURA_PERSONAGEM - 15; 
-		setDirecao("Esquerda");
+	public NPC(JogoTela telaP, String caminhoP, String qualNpcP, int larguraPersonagemPixelP,int  alturaPersonagemPixelP,int limiteLarguraTelaP, int limiteAlturaTelaP) {
+		super(telaP, caminhoP, limiteAlturaTela - alturaPersonagemPixelP * 2, larguraPersonagemPixelP, alturaPersonagemPixelP, limiteLarguraTelaP, limiteAlturaTelaP );
+		this.setQualNpc(qualNpcP);
+		this.setDirecaoAleatorio(this.aleatorio.nextInt(2));
+		if (this.getDirecaoAleatorio() == 0) {
+			this.setDirecao("Esquerda");}
+		else {
+			this.setDirecao("Direita");
+		}
 	}
 
 	public void run() {
 		while (true){
-			this.setEstadoTempo(this.getEstadoTempo() + delta);
+			this.setEstadoTempo(this.getEstadoTempo() + getDelta());
 			this.andar();
 			try {
-				Thread.sleep((int)delta);
+				Thread.sleep(15);
 			}
 			catch(InterruptedException e){
-				
+
 			}
 		}
 	}
 
-	public void andar() {
-		if(direcao == "Direita") {
-			this.andarParaDireta();
-			this.trocarDirecao();
-		}
-		else if(direcao == "Esquerda") {
-			this.andarParaEsquerda();
-			this.trocarDirecao();
-		}
+	public String getQualNpc() {
+		return qualNpc;
 	}
 
-	public void trocarDirecao(){
-		if (this.getX() == 0.0) {
-			this.direcao = "Direita";
-		}
-		else if (this.getX() == Gdx.graphics.getWidth() - LARGURA_PERSONAGEM) {
-			this.direcao = "Esquerda";
-		}
+	public void setQualNpc(String qualNpcP) {
+		this.qualNpc = qualNpcP;
+	}
+	
+	public String getDirecao() {
+		return direcao;
 	}
 
-	public TextureRegion getFrame(float dt) {
+	public void setDirecao(String direcaoP) {
+		this.direcao = direcaoP;
+	}
+	
+	public int getDirecaoAleatorio() {
+		return direcaoAleatorio;
+	}
+
+	public void setDirecaoAleatorio(int direcaoAleatorioP) {
+		this.direcaoAleatorio = direcaoAleatorioP;
+	}
+	
+	public TextureRegion getImagem(float deltaP) {
 		estadoAtual = getStado();
 
 		TextureRegion region;
 
 		switch(estadoAtual) {
 		case CORRENDO:
-			region = rolosPersonagemAndando[rolo].getKeyFrame(estadoTempo, true);
+			region = rolosImagemPersonagemAndando[roloImagem].getKeyFrame(estadoTempo, true);
 			break;
 		case PARADO:
 		default:
-			region = personagemParado[rolo];
+			region = imagemPersonagemParado[roloImagem];
 			break;
 		}
-		estadoTempo = estadoAtual == estadoAnterior ? estadoTempo + dt : 0;
+		estadoTempo = estadoAtual == estadoAnterior ? estadoTempo + deltaP : 0;
 		estadoAnterior = estadoAtual;
 		return region;
 	}
 
 	public Estado getStado() {
-		if (x > 0 && x < Gdx.graphics.getWidth() - LARGURA_PERSONAGEM ) {
+		if (this.getPosX() > 0 && this.getPosX() < limiteLarguraTela - larguraPersonagem || this.getPosY() > 0 && this.getPosY() < limiteAlturaTela - alturaPersonagem) {
 			return Estado.CORRENDO;
 
 		}
@@ -79,27 +92,274 @@ public class NPC extends Personagens implements Runnable{
 		}
 	}
 
-	public String getDirecao() {
-		return direcao;
-	}
-
-	public void setDirecao(String direcao) {
-		this.direcao = direcao;
-	}
-
 	public float getDelta() {
 		return delta;
 	}
 
-	public void setDelta(float delta) {
-		this.delta = delta;
+	public void setDelta(float deltaP) {
+		this.delta = deltaP;
 	}
 
-	public float getY() {
-		return y;
+	public void andar() {
+		if(this.getQualNpc() == "M") {
+			if(this.getDirecao() == "Direita") {
+				this.andarParaDireita();
+				this.trocarDirecaoMedico();
+			}
+			else if(this.getDirecao() == "Esquerda") {
+				this.andarParaEsquerda();
+				this.trocarDirecaoMedico();
+			}
+		}
+		else if (this.getQualNpc() == "L") {
+			if(this.getDirecao() == "Direita") {
+				this.andarParaDireita();
+				this.trocarDirecaoLouco();
+			}
+			else if(this.getDirecao() == "Esquerda") {
+				this.andarParaEsquerda();
+				this.trocarDirecaoLouco();
+			}
+			else if(this.getDirecao()== "Cima"){
+				this.andarParaCima();
+				this.trocarDirecaoLouco();
+			}
+			else if(this.getDirecao() == "Baixo") {
+				this.andarParaBaixo();
+				this.trocarDirecaoLouco();
+			} 
+			else if (this.getDirecao() == "DiagonalDireitaBaixo") {
+				this.andarParaDiagonalDireitaBaixo();
+				this.trocarDirecaoLouco();
+			}
+			else if (this.getDirecao() == "DiagonalDireitaCima") {
+				this.andarParaDiagonalDireitaCima();
+				this.trocarDirecaoLouco();
+			}
+			else if (this.getDirecao() == "DiagonalEsquerdaBaixo") {
+				this.andarParaDiagonalEsquerdaBaixo();
+				this.trocarDirecaoLouco();
+			}
+			else if (this.getDirecao() == "DiagonalEsquerdaCima") {
+				this.andarParaDiagonalEsquerdaCima();
+				this.trocarDirecaoLouco();
+			}
+		}
 	}
 
-	public void setY(float y) {
-		this.y = y;
+	public void trocarDirecaoMedico(){
+		if (this.getPosX() == 0.0) {
+			this.setDirecao("Direita");
+		}
+		else if (this.getPosX() == limiteLarguraTela - larguraPersonagem) {
+			this.setDirecao("Esquerda");
+		}
 	}
+
+	public void trocarDirecaoLouco(){
+		//saindo
+		if(this.getPosX() == 0.0 && this.getPosY() == limiteAlturaTela - alturaPersonagem) {
+			if(this.getDirecao() == "Cima" || this.getDirecao() == "Esquerda"|| this.getDirecao() =="DiagonalEsquerdaCima") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(3));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao("DiagonalDireitaBaixo");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao("Baixo");
+				}
+				else if(this.getDirecaoAleatorio () == 2) {
+					this.setDirecao("Direita");
+				}
+			}
+		}
+		else if(this.getPosX() == 0.0 && this.getPosY() == 0.0) {
+			if(this.getDirecao() == "Baixo" || this.getDirecao() == "Esquerda"|| this.getDirecao() =="DiagonalEsquerdaBaixo") {
+				this.setDirecaoAleatorio( this.aleatorio.nextInt(3));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "DiagonalDireitaCima");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "Cima");
+				}
+				else if(this.getDirecaoAleatorio () == 2) {
+					this.setDirecao( "Direita");
+				}
+			}
+		}
+		else if(this.getPosX() == limiteLarguraTela - larguraPersonagem && this.getPosY() == limiteAlturaTela - alturaPersonagem) {
+			if(this.getDirecao() == "Cima" || this.getDirecao() == "Direita"|| this.getDirecao() =="DiagonalDireitaBaixo") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(3));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "DiagonalEsquerdaBaixo");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "Baixo");
+				}
+				else if(this.getDirecaoAleatorio () == 2) {
+					this.setDirecao( "Esquerda");
+				}
+			}
+		}
+		else if(this.getPosX() == limiteLarguraTela - larguraPersonagem && this.getPosY() == 0.0) {
+			if(this.getDirecao() == "Baixo" || this.getDirecao() == "Direita"||this.getDirecao() == "DiagonalDireitaCima") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(3));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "DiagonalEsquerdaCima");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "Cima");
+				}
+				else if(this.getDirecaoAleatorio () == 2) {
+					this.setDirecao( "Esquerda");
+				}
+			}
+		}
+		else if (this.getPosX() == 0 && ((this.getPosY() >= (limiteAlturaTela - alturaPersonagem)/2 - 3) && this.getPosY() <= ((limiteAlturaTela - alturaPersonagem)/2 + 3))) {
+			if(this.getDirecao() == "Baixo" || this.getDirecao() == "Cima"|| this.getDirecao() == "Esquerda") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(5));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "Cima");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "DiagonalDireitaCima");
+				}
+				else if(this.getDirecaoAleatorio () == 2) {
+					this.setDirecao( "Direita");
+				}
+				else if(this.getDirecaoAleatorio () == 3) {
+					this.setDirecao( "DiagonalDireitaBaixo");
+				}
+				else if(this.getDirecaoAleatorio () == 4) {
+					this.setDirecao( "Baixo");
+				}
+			}
+		} 
+		else if ((this.getPosX() >= ((limiteLarguraTela - larguraPersonagem)/2 - 3 ) && this.getPosX() <= ((limiteLarguraTela - larguraPersonagem)/2 + 3)) && this.getPosY() == 0) {
+			if(this.getDirecao() == "Esquerda" || this.getDirecao() == "Direita"|| this.getDirecao() == "Baixo") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(5));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "Esquerda");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "DiagonalEsquerdaCima");
+				}
+				else if(this.getDirecaoAleatorio () == 2) {
+					this.setDirecao( "Cima");
+				}
+				else if(this.getDirecaoAleatorio () == 3) {
+					this.setDirecao( "DiagonalDireitaCima");
+				}
+				else if(this.getDirecaoAleatorio () == 4) {
+					this.setDirecao( "Direita");
+				}
+			}
+		}
+		else if (this.getPosX() == limiteLarguraTela - larguraPersonagem && ((this.getPosY() >= (limiteAlturaTela - alturaPersonagem)/2 - 3) && this.getPosY() <= ((limiteAlturaTela - alturaPersonagem)/2 + 3))) {
+			if(this.getDirecao() == "Baixo" || this.getDirecao() == "Cima"|| this.getDirecao() == "Direita") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(5));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "Cima");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "DiagonalEsquerdaCima");
+				}
+				else if(this.getDirecaoAleatorio () == 2) {
+					this.setDirecao( "Esquerda");
+				}
+				else if(this.getDirecaoAleatorio () == 3) {
+					this.setDirecao( "DiagonalEsquerdaBaixo");
+				}
+				else if(this.getDirecaoAleatorio () == 4) {
+					this.setDirecao( "Baixo");
+				}
+			}
+		}
+		else if ((this.getPosX() >= ((limiteLarguraTela - larguraPersonagem)/2 - 3) && this.getPosX() <= ((limiteLarguraTela - larguraPersonagem)/2 + 3))  && this.getPosY() == limiteAlturaTela - alturaPersonagem) {
+			if(this.getDirecao() == "Esquerda" || this.getDirecao() == "Direita"|| this.getDirecao() == "Cima") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(5));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "Esquerda");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "DiagonalEsquerdaBaixo");
+				}
+				else if(this.getDirecaoAleatorio () == 2) {
+					this.setDirecao( "Baixo");
+				}
+				else if(this.getDirecaoAleatorio () == 3) {
+					this.setDirecao( "DiagonalDireitaBaixo");
+				}
+				else if(this.getDirecaoAleatorio () == 4) {
+					this.setDirecao( "Direita");
+				}
+			}
+		}
+		else if (this.getPosX() == 0.0) {
+			if(this.getDirecao() == "DiagonalDireitaBaixo" || this.getDirecao() =="DiagonalDireitaCima" || this.getDirecao() == "DiagonalEsquerdaBaixo" || this.getDirecao() =="DiagonalEsquerdaCima") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(2));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "Baixo");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "Cima");
+				}
+			}
+		}
+		else if(this.getPosY() == 0.0 ){
+			if(this.getDirecao() == "DiagonalDireitaBaixo" || this.getDirecao() =="DiagonalDireitaCima" || this.getDirecao() == "DiagonalEsquerdaBaixo" || this.getDirecao() =="DiagonalEsquerdaCima") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(2));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "Esquerda");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "Direita");
+				}
+			}
+		}
+		else if(this.getPosX() == limiteLarguraTela - larguraPersonagem) {
+			if(this.getDirecao() == "DiagonalDireitaBaixo" || this.getDirecao() =="DiagonalDireitaCima" || this.getDirecao() == "DiagonalEsquerdaBaixo" || this.getDirecao() =="DiagonalEsquerdaCima") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(2));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "Baixo");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "Cima");
+				}
+			}
+		}
+		else if(this.getPosY() == limiteAlturaTela - alturaPersonagem) {
+			if(this.getDirecao() == "DiagonalDireitaBaixo" || this.getDirecao() =="DiagonalDireitaCima" || this.getDirecao() == "DiagonalEsquerdaBaixo" || this.getDirecao() =="DiagonalEsquerdaCima") {
+				this.setDirecaoAleatorio(this.aleatorio.nextInt(2));
+				if(this.getDirecaoAleatorio () == 0) {
+					this.setDirecao( "Esquerda");
+				}
+				else if(this.getDirecaoAleatorio () == 1) {
+					this.setDirecao( "Direita");
+				}
+			}
+		}
+
+	}
+
+	public void andarParaDiagonalEsquerdaBaixo() {
+		this.andarParaEsquerda();
+		this.andarParaBaixo();
+	}
+
+	public void andarParaDiagonalEsquerdaCima() {
+		this.andarParaEsquerda();
+		this.andarParaCima();
+	}
+
+	public void andarParaDiagonalDireitaBaixo() {
+		this.andarParaDireita();
+		this.andarParaBaixo();
+	}
+
+	public void andarParaDiagonalDireitaCima() {
+		this.andarParaDireita();
+		this.andarParaCima();
+	}
+	
 }
+

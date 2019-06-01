@@ -3,64 +3,55 @@ package com.the_darkside_of_asylum_jogo.game.tela;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
-import com.the_darkside_of_asylum_jogo.game.tela.JogoTela;
 
-
-
-public class Heroi extends Personagens{
-	float y;
-	public Heroi(JogoTela tela, String caminho){
-		super(tela, caminho);
-		y = 15; 
-	}
+public class Heroi extends Personagens implements Runnable{
 	
-	public float getY() {
-		return y;
+	private float delta;
+
+	public Heroi(JogoTela telaP, String caminhoP, int larguraPersonagemPixelP,int  alturaPersonagemPixelP, int limiteLarguraTelaP,int limiteAlturaTelaP){
+		super(telaP, caminhoP, 15, larguraPersonagemPixelP, alturaPersonagemPixelP, limiteLarguraTelaP, limiteAlturaTelaP); 
 	}
 
-	public void setY(float y) {
-		this.y = y;
+	public void run() {
+		while(true) {
+			this.setEstadoTempo(this.getEstadoTempo() + this.getDelta());
+			try {
+				Thread.sleep(15);
+			}
+			catch(InterruptedException e){
+
+			}
+			if(JogoTela.direcaoXJogador == "Esquerda") {
+				this.andarParaEsquerda();
+			}
+			else if(JogoTela.direcaoXJogador == "Direita") {
+				this.andarParaDireita();
+			}
+			if(JogoTela.direcaoYJogador == "Cima") {
+				this.andarParaCima();				
+			}
+			else if(JogoTela.direcaoYJogador == "Baixo") {
+				this.andarParaBaixo();
+			}
+		}
+
 	}
 
-
-	public void andarParaCima() {
-		if(this.getY() + ALTURA_PERSONAGEM < The_DarkSide_of_Asylum_Jogo.ALTURA_TELA ) {
-			this.setY(this.getY() + this.VELOCIDADE * Gdx.graphics.getDeltaTime());
-		}
-		else if(this.getY() + ALTURA_PERSONAGEM >= The_DarkSide_of_Asylum_Jogo.ALTURA_TELA ) {
-			this.setY(Gdx.graphics.getHeight()  - ALTURA_PERSONAGEM);
-		}
-		this.setRolo(3);
-
-	}
-
-	public void andarParaBaixo() {
-		if( this.getY()  > 0) {
-			this.setY(this.getY() - VELOCIDADE * Gdx.graphics.getDeltaTime());
-		}
-		else if ( this.getY()  <= 0){
-			this.setY(0);
-		}
-		this.setRolo(0);
-
-	}
-	
-	public TextureRegion getFrame(float dt) {
+	public TextureRegion getImagem(float deltaP) {
 		estadoAtual = getStado();
 
 		TextureRegion region;
 
 		switch(estadoAtual) {
 		case CORRENDO:
-			region = rolosPersonagemAndando[rolo].getKeyFrame(estadoTempo, true);
+			region = rolosImagemPersonagemAndando[roloImagem].getKeyFrame(estadoTempo, true);
 			break;
 		case PARADO:
 		default:
-			region = personagemParado[rolo];
+			region = imagemPersonagemParado[roloImagem];
 			break;
 		}
-		estadoTempo = estadoAtual == estadoAnterior ? estadoTempo + dt : 0;
+		estadoTempo = estadoAtual == estadoAnterior ? estadoTempo + deltaP : 0;
 		estadoAnterior = estadoAtual;
 		return region;
 	}
@@ -80,6 +71,12 @@ public class Heroi extends Personagens{
 
 	}
 
+	public float getDelta() {
+		return delta;
+	}
 
-
+	public void setDelta(float deltaP) {
+		this.delta = deltaP;
+	}
 }
+
