@@ -1,5 +1,6 @@
 package com.the_darkside_of_asylum_jogo.game.tela;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -24,20 +25,25 @@ public class Personagens{
 	public static int larguraPersonagem;
 	public static int alturaPersonagem;
 	
+	protected Colisao colisao;
+	
 	protected float estadoTempo;
 	
 	protected JogoTela tela;
 	protected static int limiteLarguraTela;
 	protected static int limiteAlturaTela;
+	
 
 	public Personagens(JogoTela telaP, String caminhoP, float posYP, int larguraPersonagemPixelP,int  alturaPersonagemPixelP,int limiteLarguraTelaP,int limiteAlturaTelaP) {
-		this.larguraPersonagem = larguraPersonagemPixelP * 2;
-		this.alturaPersonagem = alturaPersonagemPixelP * 2;
+		this.larguraPersonagem = larguraPersonagemPixelP * 3;
+		this.alturaPersonagem = alturaPersonagemPixelP * 3;
 		this.tela = telaP;
 		this.limiteLarguraTela = limiteLarguraTelaP;  
 		this.limiteAlturaTela = limiteAlturaTelaP;
 		this.setPosX(The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - larguraPersonagem /2); 
-		this.setPosY(posYP); 
+		this.setPosY(posYP);
+		
+		this.colisao = new Colisao(this.getPosX(), this.getPosY(), larguraPersonagem, alturaPersonagem);
 
 		this.setRoloImagem(0);
 		this.rolosImagemPersonagemAndando = new Animation[4];
@@ -50,10 +56,10 @@ public class Personagens{
 		this.rolosImagemPersonagemAndando[2] = new Animation(VELOCIDADE_ANIMACAO_PERSONAGEM, roloSpriteSheet[2]);
 		this.rolosImagemPersonagemAndando[3] = new Animation(VELOCIDADE_ANIMACAO_PERSONAGEM, roloSpriteSheet[3]);
 
-		this.imagemPersonagemParado[0] = new TextureRegion(new Texture(caminhoP), larguraPersonagemPixelP * 2, 0, larguraPersonagemPixelP, alturaPersonagemPixelP);
-		this.imagemPersonagemParado[1] = new TextureRegion(new Texture(caminhoP), larguraPersonagemPixelP * 2, alturaPersonagemPixelP, larguraPersonagemPixelP, alturaPersonagemPixelP);
-		this.imagemPersonagemParado[2] = new TextureRegion(new Texture(caminhoP), larguraPersonagemPixelP * 2, alturaPersonagemPixelP * 2, larguraPersonagemPixelP, alturaPersonagemPixelP);
-		this.imagemPersonagemParado[3] = new TextureRegion(new Texture(caminhoP), larguraPersonagemPixelP * 2, alturaPersonagemPixelP * 3, larguraPersonagemPixelP, alturaPersonagemPixelP);
+		this.imagemPersonagemParado[0] = new TextureRegion(new Texture(caminhoP), 0, 0, larguraPersonagemPixelP, alturaPersonagemPixelP);
+		this.imagemPersonagemParado[1] = new TextureRegion(new Texture(caminhoP), 0, alturaPersonagemPixelP, larguraPersonagemPixelP, alturaPersonagemPixelP);
+		this.imagemPersonagemParado[2] = new TextureRegion(new Texture(caminhoP), 0, alturaPersonagemPixelP * 2, larguraPersonagemPixelP, alturaPersonagemPixelP);
+		this.imagemPersonagemParado[3] = new TextureRegion(new Texture(caminhoP), 0, alturaPersonagemPixelP * 3, larguraPersonagemPixelP, alturaPersonagemPixelP);
 	}
 
 	public static float getVelocidade() {
@@ -107,24 +113,24 @@ public class Personagens{
 		else if(this.getPosX() <= 0){
 			this.setPosX(0);
 		}
-		this.setRoloImagem(1);
+		this.setRoloImagem(2);
 	}
 
 	public void andarParaDireita() {
-		if(this.getPosX() + 100 < The_DarkSide_of_Asylum_Jogo.LARGURA_TELA ) {
+		if(this.getPosX() + this.larguraPersonagem < this.limiteLarguraTela) {
 			this.setPosX(this.getPosX() + this.getVelocidade() * Gdx.graphics.getDeltaTime());
 		}
-		else if(this.getPosX() + 100 >= The_DarkSide_of_Asylum_Jogo.LARGURA_TELA ){
+		else if(this.getPosX() + this.larguraPersonagem >= this.limiteLarguraTela ){
 			this.setPosX(limiteLarguraTela - larguraPersonagem);
 		}
-		this.setRoloImagem(2);
+		this.setRoloImagem(1);
 	}
 	
 	public void andarParaCima() {
-		if(this.getPosY() + alturaPersonagem < The_DarkSide_of_Asylum_Jogo.ALTURA_TELA ) {
+		if(this.getPosY() + alturaPersonagem < this.limiteAlturaTela ) {
 			this.setPosY(this.getPosY() + this.getVelocidade() * Gdx.graphics.getDeltaTime());
 		}
-		else if(this.getPosY() + alturaPersonagem >= The_DarkSide_of_Asylum_Jogo.ALTURA_TELA ) {
+		else if(this.getPosY() + alturaPersonagem >= this.limiteAlturaTela) {
 			this.setPosY(limiteAlturaTela  - alturaPersonagem);
 		}
 		this.setRoloImagem(3);
@@ -139,7 +145,31 @@ public class Personagens{
 			this.setPosY(0);
 		}
 		this.setRoloImagem(0);
-
 	}
 	
+	public void colidiu(Colisao colisaoP) {
+		if(getColisao().colideCom(colisaoP)){
+			if(getColisao().colideDireitoCom(colisaoP)) {
+				this.setPosX(this.getPosX() - this.getVelocidade() * Gdx.graphics.getDeltaTime());
+				//NPC.estaAndando = false;
+			}
+			else if(getColisao().colideEsquerdoCom(colisaoP)) { 
+				this.setPosX(getPosX()  + this.getVelocidade() * Gdx.graphics.getDeltaTime());
+				//NPC.estaAndando = false;
+			}
+			else if(getColisao().colideCimaCom(colisaoP)) {		
+				this.setPosY(getPosY()  - this.getVelocidade() * Gdx.graphics.getDeltaTime());
+				//NPC.estaAndando = false;
+			}
+			else if(getColisao().colideBaixoCom(colisaoP)){
+				this.setPosY(getPosY()  + this.getVelocidade() * Gdx.graphics.getDeltaTime());
+				//NPC.estaAndando = false;
+			}
+		}
+		
+	}
+	
+	public Colisao getColisao() {
+		return colisao;
+	}
 }

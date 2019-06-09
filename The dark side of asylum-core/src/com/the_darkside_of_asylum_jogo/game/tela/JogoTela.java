@@ -10,7 +10,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 
+
+
 public class JogoTela implements Screen {
+
 	private The_DarkSide_of_Asylum_Jogo jogo;
 	//escolhas
 	private Escolhas jogar;
@@ -25,16 +28,18 @@ public class JogoTela implements Screen {
 	private Texture texto_escolha;
 
 	//interatividade
-	private Heroi jogador;
+	private Texture fundoInterativo01;
+	
+	public static  Heroi jogador;
 	private Thread threadJogador;
 	public static String direcaoYJogador;
 	public static String direcaoXJogador;
 	private boolean teclasOpostas;
 
-	private NPC npc1;
+	public static NPC louco;
 	private Thread threadNpc;
 
-	private Objetos mesa;
+	public static Objetos mesa;
 
 	private String startado;
 
@@ -45,8 +50,7 @@ public class JogoTela implements Screen {
 		//escolhas
 		this.jogo = jogoP;
 		this.jogar = new Escolhas();
-		seta_baixo = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core"
-				+ "/assets/Imagens/Menu/Seta_baixo.png");
+		this.seta_baixo = new Texture("Imagens/Menu/Seta_baixo.png");
 		this.seta = new Rectangle();
 		this.seta.x = 150;
 		this.seta.y = 270;
@@ -54,18 +58,24 @@ public class JogoTela implements Screen {
 		this.texto_escolha = jogar.texto_aux;
 
 		//interatividade
-		this.jogador = new Heroi(this,"/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Personagens/poke.png", 40,36, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		this.fundoInterativo01 = new Texture("Imagens/Interativos/fundo01.png");
+		
+		this.jogador = new Heroi(this,"Imagens/Interativos/Investigador.png", 17,26, Gdx.graphics.getWidth(),250);
 		this.threadJogador = new Thread(jogador);
-		this.npc1 = new NPC(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Personagens/poke.png","L", 40, 36, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		this.threadNpc = new Thread(npc1);
-		this.mesa = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Personagens/poke.png", 40, 36, Gdx.graphics.getHeight());
+		
+		this.louco = new NPC(this, "Imagens/Interativos/Louco.png","Louco", 17, 26, Gdx.graphics.getWidth(),250);
+		this.threadNpc = new Thread(louco);
+		
+		this.mesa = new Objetos(this, "Imagens/Interativos/Investigador.png", 17, 26, 250);
+		
 		this.setTeclasOpostas(false);
 		this.setStartado("n");
+
 		//maquina de estado
 		this.setEstado(1);
 
 	}
-
+	
 	public boolean isTeclasOpostas() {
 		return teclasOpostas;
 	}
@@ -89,7 +99,7 @@ public class JogoTela implements Screen {
 	public void setStartado(String startadoP) {
 		this.startado = startadoP;
 	}
-
+	
 	public void desenharEscolhas() {
 		int pos_x_escolhas = 0;
 		int pos_y_escolhas = 200;
@@ -122,18 +132,24 @@ public class JogoTela implements Screen {
 
 	public void desenharIteratividade(float deltaP) {
 		this.jogo.lote.begin();
+		this.jogo.lote.draw(fundoInterativo01, 0, 0, The_DarkSide_of_Asylum_Jogo.LARGURA_TELA, The_DarkSide_of_Asylum_Jogo.ALTURA_TELA);
 		this.jogo.lote.draw(this.mesa.getImagem(),this. mesa.getPosX(), this.mesa.getPosY(), this.mesa.larguraItem, this.mesa.alturaItem);
-		if( this.jogador.getPosY() >= this.npc1.getPosY()) {
-			this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
-			this.jogo.lote.draw(this.npc1.getImagem(deltaP), this.npc1.getPosX(), this.npc1.getPosY(), this.npc1.larguraPersonagem, this.npc1.alturaPersonagem);
-		}
-		else {
-			this.jogo.lote.draw(this.npc1.getImagem(deltaP), this.npc1.getPosX(), this.npc1.getPosY(), this.npc1.larguraPersonagem, this.npc1.alturaPersonagem);
-			this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
-		}
+		//this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		this.sobrePosicao(deltaP, louco);
 		this.jogo.lote.end();
 	}
-
+	
+	public void sobrePosicao(float deltaP, NPC npcP) {
+		if( this.jogador.getPosY() >= npcP.getPosY()) {
+			this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+			this.jogo.lote.draw(npcP.getImagem(deltaP), npcP.getPosX(), npcP.getPosY(), npcP.larguraPersonagem, npcP.alturaPersonagem);
+		}
+		else {
+			this.jogo.lote.draw(npcP.getImagem(deltaP), npcP.getPosX(), npcP.getPosY(), npcP.larguraPersonagem, npcP.alturaPersonagem);
+			this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+	}
+	
 	@SuppressWarnings("deprecation")
 	public void escolher() {
 		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (this.seta.x == 150 || this.seta.x == 515)) {
@@ -254,11 +270,10 @@ public class JogoTela implements Screen {
 		}
 		else {
 			this.capturarMovimentosHeroi();
-			this.npc1.setDelta(delta);
+			this.louco.setDelta(delta);
 			this.jogador.setDelta(delta);
-
-			Gdx.gl.glClearColor(0.2f, 0.5f, 0.2f, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+			//this.jogador.colidiu(louco.getColisao());
+			
 			this.desenharIteratividade(delta);
 		}
 

@@ -1,8 +1,12 @@
 package com.the_darkside_of_asylum_jogo.game.tela;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+
+
 
 public class Heroi extends Personagens implements Runnable{
 	
@@ -33,6 +37,11 @@ public class Heroi extends Personagens implements Runnable{
 			else if(JogoTela.direcaoYJogador == "Baixo") {
 				this.andarParaBaixo();
 			}
+			
+			this.colidiu(JogoTela.mesa.getColisao());
+			this.colidiu(JogoTela.louco.getColisao());
+			colisao.mover(this.getPosX(), this.getPosY());
+			
 		}
 
 	}
@@ -78,5 +87,6 @@ public class Heroi extends Personagens implements Runnable{
 	public void setDelta(float deltaP) {
 		this.delta = deltaP;
 	}
+	
 }
 

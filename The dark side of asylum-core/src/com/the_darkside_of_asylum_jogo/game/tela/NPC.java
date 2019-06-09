@@ -2,8 +2,9 @@ package com.the_darkside_of_asylum_jogo.game.tela;
 
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 
 public class NPC extends Personagens implements Runnable{
 
@@ -14,9 +15,10 @@ public class NPC extends Personagens implements Runnable{
 	private int direcaoAleatorio;
 	
 	private float delta;
+	public static boolean estaAndando;
 
 	public NPC(JogoTela telaP, String caminhoP, String qualNpcP, int larguraPersonagemPixelP,int  alturaPersonagemPixelP,int limiteLarguraTelaP, int limiteAlturaTelaP) {
-		super(telaP, caminhoP, limiteAlturaTela - alturaPersonagemPixelP * 2, larguraPersonagemPixelP, alturaPersonagemPixelP, limiteLarguraTelaP, limiteAlturaTelaP );
+		super(telaP, caminhoP, limiteAlturaTela - alturaPersonagemPixelP * 3, larguraPersonagemPixelP, alturaPersonagemPixelP, limiteLarguraTelaP, limiteAlturaTelaP );
 		this.setQualNpc(qualNpcP);
 		this.setDirecaoAleatorio(this.aleatorio.nextInt(2));
 		if (this.getDirecaoAleatorio() == 0) {
@@ -24,17 +26,21 @@ public class NPC extends Personagens implements Runnable{
 		else {
 			this.setDirecao("Direita");
 		}
+		estaAndando = true;
 	}
 
 	public void run() {
 		while (true){
 			this.setEstadoTempo(this.getEstadoTempo() + getDelta());
-			this.andar();
 			try {
 				Thread.sleep(15);
 			}
 			catch(InterruptedException e){
 
+			}
+			if (estaAndando) {
+			this.andar();
+			colisao.mover(this.getPosX(), this.getPosY());
 			}
 		}
 	}
@@ -101,17 +107,17 @@ public class NPC extends Personagens implements Runnable{
 	}
 
 	public void andar() {
-		if(this.getQualNpc() == "M") {
+		if(this.getQualNpc() == "Medico"|| this.getQualNpc() == "Enfermeiro" || this.getQualNpc() == "Guarda") {
 			if(this.getDirecao() == "Direita") {
 				this.andarParaDireita();
-				this.trocarDirecaoMedico();
+				this.trocarDirecao();
 			}
 			else if(this.getDirecao() == "Esquerda") {
 				this.andarParaEsquerda();
-				this.trocarDirecaoMedico();
+				this.trocarDirecao();
 			}
 		}
-		else if (this.getQualNpc() == "L") {
+		else if (this.getQualNpc() == "Louco") {
 			if(this.getDirecao() == "Direita") {
 				this.andarParaDireita();
 				this.trocarDirecaoLouco();
@@ -147,7 +153,7 @@ public class NPC extends Personagens implements Runnable{
 		}
 	}
 
-	public void trocarDirecaoMedico(){
+	public void trocarDirecao(){
 		if (this.getPosX() == 0.0) {
 			this.setDirecao("Direita");
 		}
@@ -187,7 +193,7 @@ public class NPC extends Personagens implements Runnable{
 			}
 		}
 		else if(this.getPosX() == limiteLarguraTela - larguraPersonagem && this.getPosY() == limiteAlturaTela - alturaPersonagem) {
-			if(this.getDirecao() == "Cima" || this.getDirecao() == "Direita"|| this.getDirecao() =="DiagonalDireitaBaixo") {
+			if(this.getDirecao() == "Cima" || this.getDirecao() == "Direita"|| this.getDirecao() =="DiagonalDireitaCima") {
 				this.setDirecaoAleatorio(this.aleatorio.nextInt(3));
 				if(this.getDirecaoAleatorio () == 0) {
 					this.setDirecao( "DiagonalEsquerdaBaixo");
@@ -201,7 +207,7 @@ public class NPC extends Personagens implements Runnable{
 			}
 		}
 		else if(this.getPosX() == limiteLarguraTela - larguraPersonagem && this.getPosY() == 0.0) {
-			if(this.getDirecao() == "Baixo" || this.getDirecao() == "Direita"||this.getDirecao() == "DiagonalDireitaCima") {
+			if(this.getDirecao() == "Baixo" || this.getDirecao() == "Direita"||this.getDirecao() == "DiagonalDireitaBaixo") {
 				this.setDirecaoAleatorio(this.aleatorio.nextInt(3));
 				if(this.getDirecaoAleatorio () == 0) {
 					this.setDirecao( "DiagonalEsquerdaCima");
@@ -362,4 +368,3 @@ public class NPC extends Personagens implements Runnable{
 	}
 	
 }
-
