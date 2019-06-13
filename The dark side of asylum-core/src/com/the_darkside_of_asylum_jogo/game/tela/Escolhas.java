@@ -574,7 +574,7 @@ public class Escolhas {
 		}
 
 		if(matriz[this.numero_escolha][2] == ""){
-			System.out.println(this.texto_escolha);
+			texto_aux = Consultar_imagem(this.texto_escolha);
 			return true;
 		}
 		else{
