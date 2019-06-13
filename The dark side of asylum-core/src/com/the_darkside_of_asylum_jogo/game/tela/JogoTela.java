@@ -127,6 +127,11 @@ public class JogoTela implements Screen {
 			this.jogo.lote.draw(this.seta_baixo,this.seta.x, this.seta.y, (this.seta_baixo.getWidth()/2), (this.seta_baixo.getHeight()/2));
 			this.jogo.lote.draw(this.texto_escolha, 50, 330);
 			this.jogo.lote.end();
+		} else if (this.chegou_ao_fim == true){
+			this.jogo.lote.begin();
+			this.jogo.lote.draw(this.fundo_jogo, pos_x_escolhas, 0);
+			this.jogo.lote.draw(this.texto_escolha, 50, 553);
+			this.jogo.lote.end();
 		}
 	}
 
