@@ -151,19 +151,19 @@ public class Personagens{
 		if(getColisao().colideCom(colisaoP)){
 			if(getColisao().colideDireitoCom(colisaoP)) {
 				this.setPosX(this.getPosX() - this.getVelocidade() * Gdx.graphics.getDeltaTime());
-				//NPC.estaAndando = false;
+				NPC.estaAndando = false;
 			}
 			else if(getColisao().colideEsquerdoCom(colisaoP)) { 
 				this.setPosX(getPosX()  + this.getVelocidade() * Gdx.graphics.getDeltaTime());
-				//NPC.estaAndando = false;
+				NPC.estaAndando = false;
 			}
 			else if(getColisao().colideCimaCom(colisaoP)) {		
 				this.setPosY(getPosY()  - this.getVelocidade() * Gdx.graphics.getDeltaTime());
-				//NPC.estaAndando = false;
+				NPC.estaAndando = false;
 			}
 			else if(getColisao().colideBaixoCom(colisaoP)){
 				this.setPosY(getPosY()  + this.getVelocidade() * Gdx.graphics.getDeltaTime());
-				//NPC.estaAndando = false;
+				NPC.estaAndando = false;
 			}
 		}
 		

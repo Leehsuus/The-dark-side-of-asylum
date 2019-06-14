@@ -12,20 +12,20 @@ public class The_DarkSide_of_Asylum_Jogo extends Game {
 	public static final int ALTURA_TELA = 553;
 	
 	@Override
-	public void create () {
-		lote = new SpriteBatch();
-		fonte = new BitmapFont();
-		fonte.getData().setScale(2,2);
-		setScreen(new MenuTela(this));
+	public void create() {
+		this.lote = new SpriteBatch();
+		this.fonte = new BitmapFont();
+		this.fonte.getData().setScale(2,2);
+		this.setScreen(new MenuTela(this));
 	}
 
 	@Override
-	public void render () {
+	public void render() {
 		super.render();
 	}
 	
 	@Override
-	public void dispose () {
+	public void dispose() {
 		super.dispose();
 	}
 }

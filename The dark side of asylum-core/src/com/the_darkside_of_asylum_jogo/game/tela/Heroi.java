@@ -38,7 +38,7 @@ public class Heroi extends Personagens implements Runnable{
 				this.andarParaBaixo();
 			}
 			
-			this.colidiu(JogoTela.mesa.getColisao());
+			//this.colidiu(JogoTela.mesa.getColisao());
 			this.colidiu(JogoTela.louco.getColisao());
 			colisao.mover(this.getPosX(), this.getPosY());
 			

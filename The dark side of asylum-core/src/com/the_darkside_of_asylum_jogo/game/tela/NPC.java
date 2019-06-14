@@ -89,7 +89,7 @@ public class NPC extends Personagens implements Runnable{
 	}
 
 	public Estado getStado() {
-		if (this.getPosX() > 0 && this.getPosX() < limiteLarguraTela - larguraPersonagem || this.getPosY() > 0 && this.getPosY() < limiteAlturaTela - alturaPersonagem) {
+		if ((this.getPosX() > 0 && this.getPosX() < limiteLarguraTela - larguraPersonagem || this.getPosY() > 0 && this.getPosY() < limiteAlturaTela - alturaPersonagem) && estaAndando) {
 			return Estado.CORRENDO;
 
 		}

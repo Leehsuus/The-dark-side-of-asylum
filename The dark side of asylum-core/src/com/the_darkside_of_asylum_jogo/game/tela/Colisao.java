@@ -1,7 +1,5 @@
 package com.the_darkside_of_asylum_jogo.game.tela;
 
-import com.badlogic.gdx.Gdx;
-
 public class Colisao {
 	private float posXColisao, posYColisao;
 	private int larguraColisao, alturaColisao;

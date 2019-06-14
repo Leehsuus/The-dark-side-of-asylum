@@ -3,6 +3,7 @@ package com.the_darkside_of_asylum_jogo.game.tela;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
+
 public class Som extends Thread{
 	private String nome_musica;
 	private Music musica;
@@ -15,7 +16,7 @@ public class Som extends Thread{
 
 	public void run() {
 		this.musica = Gdx.audio.newMusic(Gdx.files.internal(this.nome_musica));
-		if(MenuTela.tocando.equals("t")) {
+		if(MenuTela.tocando.equals("tocar")) {
 			musica.setLooping(true);
 			musica.play();
 		}
@@ -26,12 +27,12 @@ public class Som extends Thread{
 			catch(InterruptedException e){
 				
 			}
-			if(MenuTela.tocando.equals("p")) {
+			if(MenuTela.tocando.equals("parar")) {
 				this.musica.stop();
 			} 
-			else if(MenuTela.tocando.equals("r")){
+			else if(MenuTela.tocando.equals("retornar")){
 				this.musica.play();
-				MenuTela.tocando = "t";
+				MenuTela.tocando = "tocar";
 			}
 			
 		}

@@ -1,6 +1,10 @@
 package com.the_darkside_of_asylum_jogo.game.tela;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,6 +19,10 @@ import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 public class JogoTela implements Screen {
 
 	private The_DarkSide_of_Asylum_Jogo jogo;
+	
+	// bd 
+	ManipulacaoDados md;
+	
 	//escolhas
 	private Escolhas jogar;
 	private Texture fundo_jogo;
@@ -26,6 +34,7 @@ public class JogoTela implements Screen {
 	private boolean escolheu;
 	private boolean chegou_ao_fim;
 	private Texture texto_escolha;
+	HashMap<String, Integer> resposta = new HashMap<String, Integer>();
 
 	//interatividade
 	private Texture fundoInterativo01;
@@ -39,14 +48,18 @@ public class JogoTela implements Screen {
 	public static NPC louco;
 	private Thread threadNpc;
 
-	public static Objetos mesa;
+	//public static Objetos mesa;
 
 	private String startado;
 
 	//maquina de estado
 	public int estado;
 
+
 	public JogoTela(The_DarkSide_of_Asylum_Jogo jogoP) {
+		//bd
+		this.md = new ManipulacaoDados();
+		
 		//escolhas
 		this.jogo = jogoP;
 		this.jogar = new Escolhas();
@@ -55,7 +68,10 @@ public class JogoTela implements Screen {
 		this.seta.x = 150;
 		this.seta.y = 270;
 		this.escolheu = true;
-		this.texto_escolha = jogar.texto_aux;
+		this.texto_escolha = jogar.getTexto_aux();
+		if (MenuTela.continuar == true) {
+			md.BuscarDados(jogar);
+		}
 
 		//interatividade
 		this.fundoInterativo01 = new Texture("Imagens/Interativos/fundo01.png");
@@ -66,7 +82,7 @@ public class JogoTela implements Screen {
 		this.louco = new NPC(this, "Imagens/Interativos/Louco.png","Louco", 17, 26, Gdx.graphics.getWidth(),250);
 		this.threadNpc = new Thread(louco);
 		
-		this.mesa = new Objetos(this, "Imagens/Interativos/Investigador.png", 17, 26, 250);
+		//this.mesa = new Objetos(this, "Imagens/Interativos/Investigador.png", 17, 26, 250);
 		
 		this.setTeclasOpostas(false);
 		this.setStartado("n");
@@ -115,7 +131,7 @@ public class JogoTela implements Screen {
 			this.jogo.lote.draw(this.escolha_um, pos_x_escolhas + 15, pos_y_escolhas, (this.escolha_um.getWidth()/2), (this.escolha_um.getHeight()/2));
 			this.jogo.lote.draw(this.escolha_dois, pos_x_escolhas + 365, pos_y_escolhas, (this.escolha_dois.getWidth()/2), (this.escolha_dois.getHeight()/2));
 			this.jogo.lote.draw(this.escolha_tres, pos_x_escolhas + 730 , pos_y_escolhas, (this.escolha_tres.getWidth()/2), (this.escolha_tres.getHeight()/2));
-			this.texto_escolha = this.jogar.texto_aux;
+			this.texto_escolha = this.jogar.getTexto_aux();
 			this.jogo.lote.end();
 			this.escolheu = false;
 		} else if (this.escolheu == false && this.chegou_ao_fim == false) {
@@ -127,9 +143,10 @@ public class JogoTela implements Screen {
 			this.jogo.lote.draw(this.seta_baixo,this.seta.x, this.seta.y, (this.seta_baixo.getWidth()/2), (this.seta_baixo.getHeight()/2));
 			this.jogo.lote.draw(this.texto_escolha, 50, 330);
 			this.jogo.lote.end();
-		} else if (this.chegou_ao_fim == true){
+		}else if (this.chegou_ao_fim == true){
 			this.jogo.lote.begin();
 			this.jogo.lote.draw(this.fundo_jogo, pos_x_escolhas, 0);
+			this.texto_escolha = this.jogar.getTexto_aux();
 			this.jogo.lote.draw(this.texto_escolha, 50, 553);
 			this.jogo.lote.end();
 		}
@@ -138,7 +155,7 @@ public class JogoTela implements Screen {
 	public void desenharIteratividade(float deltaP) {
 		this.jogo.lote.begin();
 		this.jogo.lote.draw(fundoInterativo01, 0, 0, The_DarkSide_of_Asylum_Jogo.LARGURA_TELA, The_DarkSide_of_Asylum_Jogo.ALTURA_TELA);
-		this.jogo.lote.draw(this.mesa.getImagem(),this. mesa.getPosX(), this.mesa.getPosY(), this.mesa.larguraItem, this.mesa.alturaItem);
+		//this.jogo.lote.draw(this.mesa.getImagem(),this. mesa.getPosX(), this.mesa.getPosY(), this.mesa.larguraItem, this.mesa.alturaItem);
 		//this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
 		this.sobrePosicao(deltaP, louco);
 		this.jogo.lote.end();
@@ -183,6 +200,10 @@ public class JogoTela implements Screen {
 			this.jogar.Mostrar_opcoes(1);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();
 			this.escolheu = true;
+			md.InserirDadosBanco(jogar);
+			if (this.chegou_ao_fim == true) {
+				md.DeletarDoBanco();
+			}
 		}
 		else if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 515) {
 			if (this.chegou_ao_fim) {
@@ -201,8 +222,12 @@ public class JogoTela implements Screen {
 				this.threadNpc.resume();
 			}
 			this.jogar.Mostrar_opcoes(2);
-			this.chegou_ao_fim = jogar.Consultar_texto();
+			this.chegou_ao_fim = this.jogar.Consultar_texto();
 			this.escolheu = true;
+			md.InserirDadosBanco(jogar);
+			if (this.chegou_ao_fim == true) {
+				md.DeletarDoBanco();
+			}
 		}
 		else if(Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 880) {
 			if (this.chegou_ao_fim) {
@@ -222,6 +247,10 @@ public class JogoTela implements Screen {
 			this.jogar.Mostrar_opcoes(3);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();			
 			this.escolheu = true;
+			md.InserirDadosBanco(jogar);
+			if (this.chegou_ao_fim == true) {
+				md.DeletarDoBanco();
+			}
 		}
 	}
 
@@ -252,10 +281,19 @@ public class JogoTela implements Screen {
 		}
 
 		if(Gdx.input.isKeyPressed(Keys.SPACE)) {
-			this.setEstado(1);
-			this.threadNpc.suspend();
+			if(jogador.getColisao().colideCom(louco.getColisao())) {
+				this.setEstado(1);
+				this.threadNpc.suspend();
+			}
 		}
 
+	}
+	
+	public void retornarMenu() {
+		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+			md.TemDadosNoBanco();
+			this.jogo.setScreen(new MenuTela(jogo));
+		}
 	}
 
 	@Override
@@ -281,7 +319,7 @@ public class JogoTela implements Screen {
 			
 			this.desenharIteratividade(delta);
 		}
-
+		this.retornarMenu();
 	}
 
 	@Override
