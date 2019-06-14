@@ -15,7 +15,7 @@ public class MenuTela implements Screen {
 	private The_DarkSide_of_Asylum_Jogo jogo;
 
 	//bd
-	ManipulacaoDados md;
+	//ManipulacaoDados md;
 
 	//Menu
 	private Texture fundo_menu;
@@ -37,7 +37,7 @@ public class MenuTela implements Screen {
 
 	private int status_jogo = 1;
 
-	private String local_musica = "Musica/from the inside lyrics.mp3";
+	//private String local_musica = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Musica/From The Inside Lyrics.mp3";
 	private Som som = new Som();
 	public static String tocando = ""; 
 	public static boolean clicado;
@@ -50,28 +50,27 @@ public class MenuTela implements Screen {
 	public MenuTela (The_DarkSide_of_Asylum_Jogo jogo) {
 		this.jogo = jogo;
 
-		this.md = new ManipulacaoDados();
-		this.md.TemDadosNoBanco();
+		//this.md = new ManipulacaoDados();
+		//this.md.TemDadosNoBanco();
 
-		this.fundo_menu = new Texture("Imagens/Menu/fundo do menu.png");
+		this.fundo_menu = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Fundo do Menu.png");
 
-		this.btn_pt = new Texture(Gdx.files.internal("Imagens/Menu/portugues.png"));
-		this.btn_jogar_pt = new Texture(Gdx.files.internal("Imagens/Menu/jogar.png"));
-		this.btn_continuar = new Texture(Gdx.files.internal("Imagens/Menu/continuar.png"));
-		this.btn_continuarI = new Texture(Gdx.files.internal("Imagens/Menu/continuarI.png"));
-		this.btn_idioma_pt = new Texture(Gdx.files.internal("Imagens/Menu/idioma.png"));
-		this.btn_historia_pt = new Texture(Gdx.files.internal("Imagens/Menu/historia.png"));
+		this.btn_pt = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Portugues.png");
+		this.btn_jogar_pt = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Jogar.png");
+		this.btn_idioma_pt = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Idioma.png");
+		this.btn_historia_pt = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Historia.png");
 
-		this.btn_eng = new Texture(Gdx.files.internal("Imagens/Menu/english.png"));
-		this.btn_jogar_en = new Texture(Gdx.files.internal("Imagens/Menu/play.png"));
-		this.btn_idioma_en = new Texture(Gdx.files.internal("Imagens/Menu/language.png"));
-		this.btn_historia_en = new Texture(Gdx.files.internal("Imagens/Menu/story.png"));
+		this.btn_eng = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/English.png");
+		this.btn_jogar_en = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Play.png");
+		this.btn_idioma_en = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Language.png");
+		this.btn_historia_en = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Story.png");
 
-		this.seta_dir = new Texture(Gdx.files.internal("Imagens/Menu/seta.png"));
-		this.seta_esq = new Texture(Gdx.files.internal("Imagens/Menu/seta e.png"));
+		this.seta_dir = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Seta.png");
+		this.seta_esq = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/Seta e.png");
 
-		this.btn_com_som = new Texture(Gdx.files.internal("Imagens/Menu/som.png"));
-		this.btn_sem_som = new Texture(Gdx.files.internal("Imagens/Menu/sem_som.png"));
+		//fundo_jogando_aux = fun 
+		this.btn_com_som = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/som.png");
+		this.btn_sem_som = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/sem_som.png");
 		this.btn_som_aux = btn_com_som;
 
 		this.btn_som = new Rectangle();
@@ -90,7 +89,7 @@ public class MenuTela implements Screen {
 		if (statusP == 1) {
 			this.jogo.lote.draw(fundo_menu, 0, 0);
 			this.jogo.lote.draw(btn_jogar_pt, 800, 415);
-			if (md.temDados) {
+			/*if (md.temDados) {
 				this.jogo.lote.draw(btn_continuar, 800, 313);
 			}
 			else {
@@ -114,7 +113,7 @@ public class MenuTela implements Screen {
 			}
 			else {
 				this.jogo.lote.draw(btn_continuarI, 800, 313);
-			}
+			}*/
 
 			this.jogo.lote.draw(btn_idioma_en, 800, 211);
 			this.jogo.lote.draw(btn_historia_en, 800, 109);
@@ -172,7 +171,7 @@ public class MenuTela implements Screen {
 
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 458) {
 			this.dispose();
-			md.DeletarDoBanco();
+			//md.DeletarDoBanco();
 			this.tocando ="parar";
 			this.jogo.setScreen(new JogoTela(jogo));
 			this.status_jogo = 0;
@@ -180,14 +179,14 @@ public class MenuTela implements Screen {
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 358) {
-			if(md.temDados) {
+			/*if(md.temDados) {
 				this.dispose();
 				this.continuar = true;
 				this.tocando ="parar";
 				this.jogo.setScreen(new JogoTela(jogo));
 				this.status_jogo = 0;
 				this.som.stop();
-			}
+			}*/
 		}
 	}
 
@@ -212,15 +211,15 @@ public class MenuTela implements Screen {
 	}
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		this.som.tocar(local_musica);
+		/*	// TODO Auto-generated method stub
+		//this.som.tocar(local_musica);
 		try {
 			this.tocando = "tocar";
 			this.som.start();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 
 	}
 
