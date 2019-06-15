@@ -37,7 +37,7 @@ public class MenuTela implements Screen {
 
 	private int status_jogo = 1;
 
-	//private String local_musica = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Musica/From The Inside Lyrics.mp3";
+	private String local_musica = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Musica/Musica_menu.mp3";
 	private Som som = new Som();
 	public static String tocando = ""; 
 	public static boolean clicado;
@@ -94,7 +94,7 @@ public class MenuTela implements Screen {
 			}
 			else {
 				this.jogo.lote.draw(btn_continuarI, 800, 313);
-			}
+			}*/
 			this.jogo.lote.draw(btn_idioma_pt, 800, 211);
 			this.jogo.lote.draw(btn_historia_pt, 800, 109);
 			this.jogo.lote.draw(seta_dir, seta.x, seta.y);
@@ -108,7 +108,7 @@ public class MenuTela implements Screen {
 		else if (statusP == 3) {
 			this.jogo.lote.draw(fundo_menu, 0, 0);
 			this.jogo.lote.draw(btn_jogar_en, 800, 415);
-			if(md.temDados) {
+			/*if(md.temDados) {
 				this.jogo.lote.draw(btn_continuar, 800, 313);
 			}
 			else {
@@ -211,15 +211,14 @@ public class MenuTela implements Screen {
 	}
 	@Override
 	public void show() {
-		/*	// TODO Auto-generated method stub
-		//this.som.tocar(local_musica);
+		this.som.tocar(local_musica);
 		try {
 			this.tocando = "tocar";
 			this.som.start();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-		}*/
+		}
 
 	}
 
