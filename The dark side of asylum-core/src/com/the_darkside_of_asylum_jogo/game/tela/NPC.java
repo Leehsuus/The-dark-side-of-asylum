@@ -4,6 +4,7 @@ import java.util.Random;
 
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 
 
 public class NPC extends Personagens implements Runnable{
@@ -11,7 +12,7 @@ public class NPC extends Personagens implements Runnable{
 	private String qualNpc;
 	
 	private String direcao;
-	private Random aleatorio = new Random();
+	private Random aleatorio;
 	private int direcaoAleatorio;
 	
 	private float delta;
@@ -19,6 +20,7 @@ public class NPC extends Personagens implements Runnable{
 
 	public NPC(JogoTela telaP, String caminhoP, String qualNpcP, int larguraPersonagemPixelP,int  alturaPersonagemPixelP,int limiteLarguraTelaP, int limiteAlturaTelaP) {
 		super(telaP, caminhoP, limiteAlturaTela - alturaPersonagemPixelP * 3, larguraPersonagemPixelP, alturaPersonagemPixelP, limiteLarguraTelaP, limiteAlturaTelaP );
+		this.aleatorio = new Random();
 		this.setQualNpc(qualNpcP);
 		this.setDirecaoAleatorio(this.aleatorio.nextInt(2));
 		if (this.getDirecaoAleatorio() == 0) {
@@ -69,8 +71,13 @@ public class NPC extends Personagens implements Runnable{
 		this.direcaoAleatorio = direcaoAleatorioP;
 	}
 	
-	public TextureRegion getImagem(float deltaP) {
-		estadoAtual = getStado();
+	public void reposicionar() {
+		this.setPosX(The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - larguraPersonagem /2); 
+		this.setPosY(this.limiteAlturaTela - this.alturaPersonagem);
+	}
+	
+	public TextureRegion pegarImagem(float deltaP) {
+		estadoAtual = pegarStado();
 
 		TextureRegion region;
 
@@ -88,7 +95,7 @@ public class NPC extends Personagens implements Runnable{
 		return region;
 	}
 
-	public Estado getStado() {
+	public Estado pegarStado() {
 		if ((this.getPosX() > 0 && this.getPosX() < limiteLarguraTela - larguraPersonagem || this.getPosY() > 0 && this.getPosY() < limiteAlturaTela - alturaPersonagem) && estaAndando) {
 			return Estado.CORRENDO;
 

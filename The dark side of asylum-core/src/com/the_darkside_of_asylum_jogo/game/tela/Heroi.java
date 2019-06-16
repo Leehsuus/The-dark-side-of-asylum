@@ -4,6 +4,7 @@ package com.the_darkside_of_asylum_jogo.game.tela;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 
 
 
@@ -38,16 +39,58 @@ public class Heroi extends Personagens implements Runnable{
 				this.andarParaBaixo();
 			}
 			
-			//this.colidiu(JogoTela.mesa.getColisao());
-			this.colidiu(JogoTela.louco.getColisao());
+			if (JogoTela.desenhar == "Medico") {
+				this.colidiu(JogoTela.medico.getColisao());
+			}
+			else if(JogoTela.desenhar == "Paciente") {
+				this.colidiu(JogoTela.louco.getColisao());	
+			}
+
+			else if(JogoTela.desenhar == "Porta") {
+				this.colidiu(JogoTela.porta.getColisao());
+			}
+			else if(JogoTela.desenhar == "Enfermeiro") {
+				this.colidiu(JogoTela.enfermeiro.getColisao());
+
+			}
+			else if(JogoTela.desenhar == "Cafe") {
+				this.colidiu(JogoTela.cafe.getColisao());
+			}
+			else if(JogoTela.desenhar == "Guarda") {
+				this.colidiu(JogoTela.guarda.getColisao());
+			}
+			else if(JogoTela.desenhar == "Cigarro") {
+				this.colidiu(JogoTela.cigarro.getColisao());
+			}
+			else if(JogoTela.desenhar == "Bebida") {
+				this.colidiu(JogoTela.bebida.getColisao());
+			}
+			else if(JogoTela.desenhar == "Parede") {
+				this.colidiu(JogoTela.parede.getColisao());
+			}
+			else if(JogoTela.desenhar == "Cama") {
+				this.colidiu(JogoTela.cama.getColisao());
+			}
+			else if (JogoTela.desenhar == "Remedio") {
+				this.colidiu(JogoTela.remedio.getColisao());
+			}
+			else if (JogoTela.desenhar == "Estante") {
+				this.colidiu(JogoTela.estante.getColisao());
+			}
+			else if (JogoTela.desenhar == "Banco") {
+				this.colidiu(JogoTela.banco.getColisao());
+			}
+			else if(JogoTela.desenhar == "Mesa") {
+				this.colidiu(JogoTela.mesa.getColisao());
+			}
 			colisao.mover(this.getPosX(), this.getPosY());
 			
 		}
 
 	}
 
-	public TextureRegion getImagem(float deltaP) {
-		estadoAtual = getStado();
+	public TextureRegion pegarImagem(float deltaP) {
+		estadoAtual = pegarStado();
 
 		TextureRegion region;
 
@@ -65,7 +108,7 @@ public class Heroi extends Personagens implements Runnable{
 		return region;
 	}
 
-	public Estado getStado() {
+	public Estado pegarStado() {
 		if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.RIGHT) ) {
 			if ((Gdx.input.isKeyPressed(Keys.UP) && Gdx.input.isKeyPressed(Keys.DOWN)) || (Gdx.input.isKeyPressed(Keys.LEFT) &&  Gdx.input.isKeyPressed(Keys.RIGHT))) {
 				return Estado.PARADO;
@@ -88,5 +131,10 @@ public class Heroi extends Personagens implements Runnable{
 		this.delta = deltaP;
 	}
 	
+	
+	public void reposicionar() {
+		this.setPosX(The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - larguraPersonagem /2); 
+		this.setPosY(15);
+	}
 }
 

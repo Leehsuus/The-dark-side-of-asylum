@@ -2,6 +2,9 @@ package com.the_darkside_of_asylum_jogo.game.tela;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -16,10 +19,10 @@ import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 public class JogoTela implements Screen {
 
 	private The_DarkSide_of_Asylum_Jogo jogo;
-	
+
 	// bd 
-	//ManipulacaoDados md;
-	
+	//private ManipulacaoDados md;
+
 	//escolhas
 	private Escolhas jogar;
 	private Texture fundo_jogo;
@@ -31,23 +34,55 @@ public class JogoTela implements Screen {
 	private boolean escolheu;
 	private boolean chegou_ao_fim;
 	private Texture texto_escolha;
-	HashMap<String, Integer> resposta = new HashMap<String, Integer>();
 
 	//interatividade
 	private Texture fundoInterativo01;
-	
-	public  Heroi jogador;
+
+	public static  Heroi jogador;
 	private Thread threadJogador;
 	public static String direcaoYJogador;
 	public static String direcaoXJogador;
 	private boolean teclasOpostas;
+	private String startadoJogador;
+	
+	public static NPC medico;
+	private Thread threadMedico;
+	private String startadoMedico;
 
 	public static NPC louco;
-	private Thread threadNpc;
+	private Thread threadLouco;
+	private String startadoLouco;
 
-	//public static Objetos mesa;
+	public static Objetos porta;
 
-	private String startado;
+	public static NPC enfermeiro; 
+	private Thread threadEnfermeiro;
+	private String startadoEnfermeiro;
+
+	public static Objetos cafe;
+
+	public static NPC guarda; 
+	private Thread threadGuarda;
+	private String startadoGuarda;
+
+	public static Objetos cigarro;
+
+	public static Objetos bebida;
+
+	public static Objetos parede;
+
+	public static Objetos cama;
+
+	public static Objetos remedio;
+
+	public static Objetos estante;
+
+	public static Objetos banco;
+
+	public static Objetos mesa;
+
+
+	public static String desenhar;
 
 	//maquina de estado
 	public int estado;
@@ -56,7 +91,7 @@ public class JogoTela implements Screen {
 	public JogoTela(The_DarkSide_of_Asylum_Jogo jogoP) {
 		//bd
 		//this.md = new ManipulacaoDados();
-		
+
 		//escolhas
 		this.jogo = jogoP;
 		this.jogar = new Escolhas();
@@ -65,30 +100,62 @@ public class JogoTela implements Screen {
 		this.seta.x = 150;
 		this.seta.y = 120;
 		this.escolheu = true;
-		this.texto_escolha = jogar.texto_aux;
-		/*if (MenuTela.continuar == true) {
-			md.BuscarDados(jogar);
-		}*/
+		this.texto_escolha = jogar.getTexto_aux();
+		if (MenuTela.continuar == true) {
+			//md.BuscarDados(jogar);
+		}
 
 		//interatividade
-		this.fundoInterativo01 = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Fundo01.png");
-		
-		this.jogador = new Heroi(this,"/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17,26, Gdx.graphics.getWidth(),250);
+		this.fundoInterativo01 = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/fundo01.png");
+
+		this.jogador = new Heroi(this,"/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, Gdx.graphics.getWidth(), 250);
 		this.threadJogador = new Thread(jogador);
-		
+
+		this.medico = new NPC(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Medico.png","Medico", 17, 26, Gdx.graphics.getWidth(), 250);
+		this.threadMedico = new Thread(medico);
+
 		this.louco = new NPC(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Louco.png","Louco", 17, 26, Gdx.graphics.getWidth(),250);
-		this.threadNpc = new Thread(louco);
-		
-		//this.mesa = new Objetos(this, "Imagens/Interativos/Investigador.png", 17, 26, 250);
-		
+		this.threadLouco = new Thread(louco);
+
+		this.porta = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+
+		this.enfermeiro = new NPC(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Enfermeiro.png","Enfermeiro", 17, 26, Gdx.graphics.getWidth(),250);
+		this.threadEnfermeiro = new Thread(enfermeiro);
+
+		this.cafe = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+
+		this.guarda = new NPC(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Guarda.png","Guarda", 17, 26, Gdx.graphics.getWidth(),250);
+		this.threadGuarda = new Thread(guarda);
+
+		this.cigarro = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+
+		this.bebida = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+
+		this.parede = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+
+		this.cama = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+
+		this.remedio = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+
+		this.estante = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+
+		this.banco = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+
+		this.mesa = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+
 		this.setTeclasOpostas(false);
-		this.setStartado("n");
+		this.setStartadoJogador("n");
+		this.setStartadoMedico("n");
+		this.setStartadoLouco("n");
+		this.setStartadoEnfermeiro("n");
+		this.setStartadoGuarda("n");
+		
 
 		//maquina de estado
 		this.setEstado(1);
 
 	}
-	
+
 	public boolean isTeclasOpostas() {
 		return teclasOpostas;
 	}
@@ -105,14 +172,46 @@ public class JogoTela implements Screen {
 		this.estado = estadoP;
 	}
 
-	public String getStartado() {
-		return startado;
+	public String getStartadoJogador() {
+		return startadoJogador;
 	}
 
-	public void setStartado(String startadoP) {
-		this.startado = startadoP;
+	public void setStartadoJogador(String startadoJogadorP) {
+		this.startadoJogador = startadoJogadorP;
 	}
 	
+	public String getStartadoMedico() {
+		return startadoMedico;
+	}
+
+	public void setStartadoMedico(String startadoMedico) {
+		this.startadoMedico = startadoMedico;
+	}
+
+	public String getStartadoLouco() {
+		return startadoLouco;
+	}
+
+	public void setStartadoLouco(String startadoLouco) {
+		this.startadoLouco = startadoLouco;
+	}
+
+	public String getStartadoEnfermeiro() {
+		return startadoEnfermeiro;
+	}
+
+	public void setStartadoEnfermeiro(String startadoEnfermeiro) {
+		this.startadoEnfermeiro = startadoEnfermeiro;
+	}
+
+	public String getStartadoGuarda() {
+		return startadoGuarda;
+	}
+
+	public void setStartadoGuarda(String startadoGuarda) {
+		this.startadoGuarda = startadoGuarda;
+	}
+
 	public void desenharEscolhas() {
 		int pos_x_escolhas = 0;
 		int pos_y_escolhas = 50;
@@ -128,7 +227,7 @@ public class JogoTela implements Screen {
 			this.jogo.lote.draw(this.escolha_um, pos_x_escolhas + 15, pos_y_escolhas, (this.escolha_um.getWidth()/2), (this.escolha_um.getHeight()/2));
 			this.jogo.lote.draw(this.escolha_dois, pos_x_escolhas + 365, pos_y_escolhas, (this.escolha_dois.getWidth()/2), (this.escolha_dois.getHeight()/2));
 			this.jogo.lote.draw(this.escolha_tres, pos_x_escolhas + 730 , pos_y_escolhas, (this.escolha_tres.getWidth()/2), (this.escolha_tres.getHeight()/2));
-			this.texto_escolha = this.jogar.texto_aux;
+			this.texto_escolha = this.jogar.getTexto_aux();
 			this.jogo.lote.end();
 			this.escolheu = false;
 		} else if (this.escolheu == false && this.chegou_ao_fim == false) {
@@ -140,11 +239,11 @@ public class JogoTela implements Screen {
 			this.jogo.lote.draw(this.seta_baixo,this.seta.x, this.seta.y, (this.seta_baixo.getWidth()/2), (this.seta_baixo.getHeight()/2));
 			this.jogo.lote.draw(this.texto_escolha, 40, 180);
 			this.jogo.lote.end();
-		} else if (this.chegou_ao_fim == true && this.escolheu == true){
-			//this.texto_escolha = this.jogar.texto_aux;
+		}else if (this.chegou_ao_fim == true){
 			this.jogo.lote.begin();
 			this.jogo.lote.draw(this.fundo_jogo, pos_x_escolhas, 0);
-			this.jogo.lote.draw(this.jogar.texto_aux, 40, 30);
+			this.texto_escolha = this.jogar.getTexto_aux();
+			this.jogo.lote.draw(this.texto_escolha, 40, 30);
 			this.jogo.lote.end();
 		}
 	}
@@ -152,20 +251,135 @@ public class JogoTela implements Screen {
 	public void desenharIteratividade(float deltaP) {
 		this.jogo.lote.begin();
 		this.jogo.lote.draw(fundoInterativo01, 0, 0, The_DarkSide_of_Asylum_Jogo.LARGURA_TELA, The_DarkSide_of_Asylum_Jogo.ALTURA_TELA);
-		//this.jogo.lote.draw(this.mesa.getImagem(),this. mesa.getPosX(), this.mesa.getPosY(), this.mesa.larguraItem, this.mesa.alturaItem);
-		//this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
-		this.sobrePosicao(deltaP, louco);
+		if (desenhar == "Medico") {
+			this.sobreposicao(deltaP, medico);
+		}
+		else if(desenhar == "Paciente") {
+			this.sobreposicao(deltaP, louco);	
+		}
+
+		else if(desenhar == "Porta") {
+			this.jogo.lote.draw(this.porta.getImagem(),this. porta.getPosX(), this.porta.getPosY(), this.porta.larguraItem, this.porta.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+		else if(desenhar == "Enfermeiro") {
+			this.sobreposicao(deltaP, enfermeiro);
+
+		}
+		else if(desenhar == "Cafe") {
+			this.jogo.lote.draw(this.cafe.getImagem(),this. cafe.getPosX(), this.cafe.getPosY(), this.cafe.larguraItem, this.cafe.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+		else if(desenhar == "Guarda") {
+			this.sobreposicao(deltaP, guarda);
+		}
+		else if(desenhar == "Cigarro") {
+			this.jogo.lote.draw(this.cigarro.getImagem(),this. cigarro.getPosX(), this.cigarro.getPosY(), this.cigarro.larguraItem, this.cigarro.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+		else if(desenhar == "Bebida") {
+			this.jogo.lote.draw(this.bebida.getImagem(),this. bebida.getPosX(), this.bebida.getPosY(), this.bebida.larguraItem, this.bebida.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+		else if(desenhar == "Parede") {
+			this.jogo.lote.draw(this.parede.getImagem(),this. parede.getPosX(), this.parede.getPosY(), this.parede.larguraItem, this.parede.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+		else if(desenhar == "Cama") {
+			this.jogo.lote.draw(this.cama.getImagem(),this. cama.getPosX(), this.cama.getPosY(), this.cama.larguraItem, this.cama.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+		else if (desenhar == "Remedio") {
+			this.jogo.lote.draw(this.remedio.getImagem(),this. remedio.getPosX(), this.remedio.getPosY(), this.remedio.larguraItem, this.remedio.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+		else if (desenhar == "Estante") {
+			this.jogo.lote.draw(this.estante.getImagem(),this. estante.getPosX(), this.estante.getPosY(), this.estante.larguraItem, this.estante.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+		else if (desenhar == "Banco") {
+			this.jogo.lote.draw(this.banco.getImagem(),this. banco.getPosX(), this.banco.getPosY(), this.banco.larguraItem, this.banco.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+		else if(desenhar == "Mesa") {
+			this.jogo.lote.draw(this.mesa.getImagem(),this. mesa.getPosX(), this.mesa.getPosY(), this.mesa.larguraItem, this.mesa.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
 		this.jogo.lote.end();
 	}
-	
-	public void sobrePosicao(float deltaP, NPC npcP) {
+
+	public void sobreposicao(float deltaP, NPC npcP) {
 		if( this.jogador.getPosY() >= npcP.getPosY()) {
-			this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
-			this.jogo.lote.draw(npcP.getImagem(deltaP), npcP.getPosX(), npcP.getPosY(), npcP.larguraPersonagem, npcP.alturaPersonagem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+			this.jogo.lote.draw(npcP.pegarImagem(deltaP), npcP.getPosX(), npcP.getPosY(), npcP.larguraPersonagem, npcP.alturaPersonagem);
 		}
 		else {
-			this.jogo.lote.draw(npcP.getImagem(deltaP), npcP.getPosX(), npcP.getPosY(), npcP.larguraPersonagem, npcP.alturaPersonagem);
-			this.jogo.lote.draw(this.jogador.getImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+			this.jogo.lote.draw(npcP.pegarImagem(deltaP), npcP.getPosX(), npcP.getPosY(), npcP.larguraPersonagem, npcP.alturaPersonagem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+	}
+
+	public void threadStartado() {
+		if (this.getStartadoMedico() == "n") {
+			if (desenhar == "Medico") {
+				this.threadMedico.start();
+				this.setStartadoMedico("s");
+			}
+		}
+		if(this.getStartadoLouco() == "n") {
+			if (desenhar == "Paciente") {
+				this.threadLouco.start();
+				this.setStartadoLouco("s");
+			}
+		}
+		if(this.getStartadoEnfermeiro() == "n") {
+			if (desenhar == "Enfermeiro") {
+				this.threadEnfermeiro.start();
+				this.setStartadoEnfermeiro("s");
+			}
+		}
+		if(this.getStartadoGuarda() == "n") {
+			 if(desenhar == "Guarda") {
+				this.threadGuarda.start();
+				this.setStartadoGuarda("s");
+			}
+		}
+		if(this.getStartadoJogador() == "n") {
+			this.threadJogador.start();
+			this.setStartadoJogador("s");
+		}
+		if (this.getStartadoMedico() == "s") {
+			if (desenhar == "Medico") {
+				this.medico.reposicionar();
+				this.medico.estaAndando = true;
+				this.threadMedico.resume();
+			}
+		}
+		if (this.getStartadoLouco() == "s") {
+			if (desenhar == "Paciente") {
+				this.louco.reposicionar();
+				this.louco.estaAndando = true;
+				this.threadLouco.resume();
+			}
+		}
+		if (this.getStartadoEnfermeiro() == "s"){
+			if (desenhar == "Enfermeiro") {
+				this.enfermeiro.reposicionar();
+				this.enfermeiro.estaAndando = true;
+				this.threadEnfermeiro.resume();
+			}
+		}
+		if (this.getStartadoGuarda() == "s") {
+			if(desenhar == "Guarda") {
+				this.guarda.reposicionar();
+				this.guarda.estaAndando = true;
+				this.threadGuarda.resume();
+			}
+		}
+		if (this.getStartadoJogador() == "s") {
+			this.direcaoYJogador = "Cima";
+			this.jogador.reposicionar();
+			this.threadJogador.resume();
 		}
 	}
 	
@@ -183,17 +397,10 @@ public class JogoTela implements Screen {
 				this.setEstado(1);
 			}
 			else{
+				this.desenhar = this.jogar.Consultar_Oque_Desenhar(1);
 				this.setEstado(2);
 			}
-
-			if (this.getStartado() == "n") {
-				this.threadNpc.start();
-				this.threadJogador.start();
-				this.setStartado("s");;
-			}
-			else if (this.getStartado() == "s") {
-				this.threadNpc.resume();
-			}
+			this.threadStartado();
 			this.jogar.Mostrar_opcoes(1);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();
 			this.escolheu = true;
@@ -207,47 +414,35 @@ public class JogoTela implements Screen {
 				this.setEstado(1);
 			}
 			else{
+				this.desenhar = this.jogar.Consultar_Oque_Desenhar(2);
 				this.setEstado(2);
 			}
-
-			if (this.getStartado() == "n") {
-				this.threadJogador.start();
-				this.threadNpc.start();
-				this.setStartado("s");
-			}
-			else if (this.getStartado() == "s") {
-				this.threadNpc.resume();
-			}
+			
+			this.threadStartado();
 			this.jogar.Mostrar_opcoes(2);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();
 			this.escolheu = true;
 			//md.InserirDadosBanco(jogar);
-			/*if (this.chegou_ao_fim == true) {
-				md.DeletarDoBanco();
-			}*/
+			if (this.chegou_ao_fim == true) {
+				//md.DeletarDoBanco();
+			}
 		}
 		else if(Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 880) {
 			if (this.chegou_ao_fim) {
 				this.setEstado(1);
 			}
 			else{
+				this.desenhar = this.jogar.Consultar_Oque_Desenhar(3);
 				this.setEstado(2);
 			}
-			if (this.getStartado() == "n") {
-				this.threadJogador.start();
-				this.threadNpc.start();
-				this.setStartado("s");
-			}
-			else if (this.getStartado() == "s") {
-				this.threadNpc.resume();
-			}
+			this.threadStartado();
 			this.jogar.Mostrar_opcoes(3);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();			
 			this.escolheu = true;
 			//md.InserirDadosBanco(jogar);
-			/*if (this.chegou_ao_fim == true) {
-				md.DeletarDoBanco();
-			}*/
+			if (this.chegou_ao_fim == true) {
+				//md.DeletarDoBanco();
+			}
 		}
 	}
 
@@ -278,14 +473,81 @@ public class JogoTela implements Screen {
 		}
 
 		if(Gdx.input.isKeyPressed(Keys.SPACE)) {
-			if(jogador.getColisao().colideCom(louco.getColisao())) {
-				this.setEstado(1);
-				this.threadNpc.suspend();
+			if (desenhar == "Medico") {
+				this.interagirNPC(medico);
+			}
+			else if(desenhar == "Paciente") {
+				this.interagirNPC(louco);
+			}
+
+			else if(desenhar == "Porta") {
+				this.interagirObjetos(porta);
+			}
+			else if(desenhar == "Enfermeiro") {
+				this.interagirNPC(enfermeiro);
+
+			}
+			else if(desenhar == "Cafe") {
+				this.interagirObjetos(cafe);
+			}
+			else if(desenhar == "Guarda") {
+				this.interagirNPC(guarda);
+
+			}
+			else if(desenhar == "Cigarro") {
+				this.interagirObjetos(cigarro);
+			}
+			else if(desenhar == "Bebida") {
+				this.interagirObjetos(bebida);
+			}
+			else if(desenhar == "Parede") {
+				this.interagirObjetos(parede);
+			}
+			else if(desenhar == "Cama") {
+				this.interagirObjetos(cama);
+			}
+			else if (desenhar == "Remedio") {
+				this.interagirObjetos(remedio);
+			}
+			else if (desenhar == "Estante") {
+				this.interagirObjetos(estante);
+			}
+			else if (desenhar == "Banco") {
+				this.interagirObjetos(banco);
+			}
+			else if(desenhar == "Mesa") {
+				this.interagirObjetos(mesa);
 			}
 		}
 
 	}
-	
+
+	public void interagirObjetos(Objetos objetosP) {
+		if(jogador.getColisao().colideCom(objetosP.getColisao())) {
+			this.setEstado(1);
+			this.threadJogador.suspend();
+		}
+	}
+
+	public void interagirNPC(NPC npcP) {
+		if(jogador.getColisao().colideCom(npcP.getColisao())) {
+			this.setEstado(1);
+			if (desenhar == "Medico") {
+				this.threadMedico.suspend();
+			}
+			else if (desenhar == "Paciente") {
+				this.threadLouco.suspend();
+			}
+			else if (desenhar == "Enfermeiro") {
+				this.threadEnfermeiro.suspend();
+			}
+			else if(desenhar == "Guarda") {
+				this.threadGuarda.suspend();
+			}
+			this.threadJogador.suspend();
+		}
+	}
+
 	public void retornarMenu() {
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			//md.TemDadosNoBanco();
@@ -313,7 +575,7 @@ public class JogoTela implements Screen {
 			this.louco.setDelta(delta);
 			this.jogador.setDelta(delta);
 			//this.jogador.colidiu(louco.getColisao());
-			
+
 			this.desenharIteratividade(delta);
 		}
 		this.retornarMenu();
