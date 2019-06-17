@@ -32,7 +32,7 @@ public class ComoJogar implements Screen{
 
 	public void voltar() {
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-      this.dispose();
+      			this.dispose();
 			this.jogo.setScreen(new MenuTela(jogo));
 		}
 	}
