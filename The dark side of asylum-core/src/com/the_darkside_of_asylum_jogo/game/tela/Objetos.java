@@ -6,13 +6,13 @@ import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 
 public class Objetos {
 	//bonbalsalro = 40 x 36
-	
+
 	private TextureRegion itemImagem;
 
 	private float posX;
 	private float posY;
-	public static int larguraItem;
-	public static int alturaItem;
+	public int larguraItem;
+	public int alturaItem;
 	
 	private Colisao colisao;
 	
@@ -20,10 +20,10 @@ public class Objetos {
 	
 	private JogoTela tela;
 
-	public Objetos(JogoTela telaP, String caminhoP, int larguraItemPixelP, int alturaItemPixelP, int limiteAlturaTelaP) {
-		this.larguraItem = larguraItemPixelP * 3;
-		this.alturaItem = alturaItemPixelP * 3;
-		this.posX = The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - larguraItem /2; 
+	public Objetos(JogoTela telaP, String caminhoP, int larguraItemPixelP, int alturaItemPixelP, int limiteAlturaTelaP, int posXP) {
+		this.larguraItem = larguraItemPixelP;
+		this.alturaItem = alturaItemPixelP;
+		this.posX = posXP; 
 		this.posY =  limiteAlturaTelaP - alturaItem;
 		this.itemImagem = new TextureRegion(new Texture(caminhoP),0, 0, larguraItemPixelP, alturaItemPixelP);
 		

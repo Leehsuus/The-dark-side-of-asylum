@@ -8,7 +8,6 @@ import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 
 
 public class NPC extends Personagens implements Runnable{
-
 	private String qualNpc;
 	
 	private String direcao;

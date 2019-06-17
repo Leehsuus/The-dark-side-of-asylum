@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 
 
-
-
 public class Heroi extends Personagens implements Runnable{
 	
 	private float delta;
@@ -69,6 +67,9 @@ public class Heroi extends Personagens implements Runnable{
 				this.colidiu(JogoTela.parede.getColisao());
 			}
 			else if(JogoTela.desenhar == "Cama") {
+				this.colidiu(JogoTela.estante.getColisao());
+				this.colidiu(JogoTela.estante2.getColisao());
+				this.colidiu(JogoTela.armario.getColisao());
 				this.colidiu(JogoTela.cama.getColisao());
 			}
 			else if (JogoTela.desenhar == "Remedio") {
@@ -76,9 +77,8 @@ public class Heroi extends Personagens implements Runnable{
 			}
 			else if (JogoTela.desenhar == "Estante") {
 				this.colidiu(JogoTela.estante.getColisao());
-			}
-			else if (JogoTela.desenhar == "Banco") {
-				this.colidiu(JogoTela.banco.getColisao());
+				this.colidiu(JogoTela.estante2.getColisao());
+				this.colidiu(JogoTela.cama.getColisao());
 			}
 			else if(JogoTela.desenhar == "Mesa") {
 				this.colidiu(JogoTela.mesa.getColisao());

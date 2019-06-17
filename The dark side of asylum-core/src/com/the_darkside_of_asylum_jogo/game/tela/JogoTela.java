@@ -1,10 +1,6 @@
 package com.the_darkside_of_asylum_jogo.game.tela;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,13 +11,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 
 
-
 public class JogoTela implements Screen {
 
 	private The_DarkSide_of_Asylum_Jogo jogo;
 
 	// bd 
-	//private ManipulacaoDados md;
+	private ManipulacaoDados md;
 
 	//escolhas
 	private Escolhas jogar;
@@ -77,10 +72,11 @@ public class JogoTela implements Screen {
 
 	public static Objetos estante;
 
-	public static Objetos banco;
-
 	public static Objetos mesa;
-
+	
+	public static Objetos estante2;
+	
+	public static Objetos armario;
 
 	public static String desenhar;
 
@@ -90,7 +86,7 @@ public class JogoTela implements Screen {
 
 	public JogoTela(The_DarkSide_of_Asylum_Jogo jogoP) {
 		//bd
-		//this.md = new ManipulacaoDados();
+		this.md = new ManipulacaoDados();
 
 		//escolhas
 		this.jogo = jogoP;
@@ -102,7 +98,7 @@ public class JogoTela implements Screen {
 		this.escolheu = true;
 		this.texto_escolha = jogar.getTexto_aux();
 		if (MenuTela.continuar == true) {
-			//md.BuscarDados(jogar);
+			md.BuscarDados(jogar);
 		}
 
 		//interatividade
@@ -117,39 +113,40 @@ public class JogoTela implements Screen {
 		this.louco = new NPC(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Louco.png","Louco", 17, 26, Gdx.graphics.getWidth(),250);
 		this.threadLouco = new Thread(louco);
 
-		this.porta = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+		this.porta = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Porta.png", 70, 116, 310, (70 - 50 /2));
 
 		this.enfermeiro = new NPC(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Enfermeiro.png","Enfermeiro", 17, 26, Gdx.graphics.getWidth(),250);
 		this.threadEnfermeiro = new Thread(enfermeiro);
 
-		this.cafe = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+		this.cafe = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Cafe.png", 65, 78, 247, (The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - 65/2));
 
 		this.guarda = new NPC(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Guarda.png","Guarda", 17, 26, Gdx.graphics.getWidth(),250);
 		this.threadGuarda = new Thread(guarda);
 
-		this.cigarro = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+		this.cigarro = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Cigarro.png", 65, 78, 247, (The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - 65/2));
 
-		this.bebida = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+		this.bebida = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Bebida.png", 65, 78, 247, (The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - 65 /2));
 
-		this.parede = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+		this.parede = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Parede.png", 51, 78, 265, (The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - 51 /2));
 
-		this.cama = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+		this.cama = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Cama.png", 65, 78, 230, (900 - 65 /2));
 
-		this.remedio = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+		this.remedio = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Remedio.png", 65, 78, 247, (The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - 65 /2));
 
-		this.estante = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+		this.estante = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Estante.png", 65, 78, 250, (The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - 65 /2));
 
-		this.banco = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
+		this.mesa = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Mesa.png", 65, 78, 250, (The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - 65 /2));
 
-		this.mesa = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Investigador.png", 17, 26, 250);
-
+		this.estante2 = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Estante2.png", 60,60, 230, (400 - 60 /2));
+		
+		this.armario = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Armario.png", 130, 150, 320,(140 - 130 /2));
+		
 		this.setTeclasOpostas(false);
 		this.setStartadoJogador("n");
 		this.setStartadoMedico("n");
 		this.setStartadoLouco("n");
 		this.setStartadoEnfermeiro("n");
 		this.setStartadoGuarda("n");
-		
 
 		//maquina de estado
 		this.setEstado(1);
@@ -286,6 +283,9 @@ public class JogoTela implements Screen {
 			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
 		}
 		else if(desenhar == "Cama") {
+			this.jogo.lote.draw(this.estante.getImagem(),this. estante.getPosX(), this.estante.getPosY(), this.estante.larguraItem, this.estante.alturaItem);
+			this.jogo.lote.draw(this.armario.getImagem(),this. armario.getPosX(), this.armario.getPosY(), this.armario.larguraItem, this.armario.alturaItem);
+			this.jogo.lote.draw(this.estante2.getImagem(),this. estante2.getPosX(), this.estante2.getPosY(), this.estante2.larguraItem, this.estante2.alturaItem);
 			this.jogo.lote.draw(this.cama.getImagem(),this. cama.getPosX(), this.cama.getPosY(), this.cama.larguraItem, this.cama.alturaItem);
 			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
 		}
@@ -295,10 +295,8 @@ public class JogoTela implements Screen {
 		}
 		else if (desenhar == "Estante") {
 			this.jogo.lote.draw(this.estante.getImagem(),this. estante.getPosX(), this.estante.getPosY(), this.estante.larguraItem, this.estante.alturaItem);
-			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
-		}
-		else if (desenhar == "Banco") {
-			this.jogo.lote.draw(this.banco.getImagem(),this. banco.getPosX(), this.banco.getPosY(), this.banco.larguraItem, this.banco.alturaItem);
+			this.jogo.lote.draw(this.estante2.getImagem(),this. estante2.getPosX(), this.estante2.getPosY(), this.estante2.larguraItem, this.estante2.alturaItem);
+			this.jogo.lote.draw(this.cama.getImagem(),this. cama.getPosX(), this.cama.getPosY(), this.cama.larguraItem, this.cama.alturaItem);
 			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
 		}
 		else if(desenhar == "Mesa") {
@@ -351,28 +349,28 @@ public class JogoTela implements Screen {
 		if (this.getStartadoMedico() == "s") {
 			if (desenhar == "Medico") {
 				this.medico.reposicionar();
-				this.medico.estaAndando = true;
+				NPC.estaAndando = true;
 				this.threadMedico.resume();
 			}
 		}
 		if (this.getStartadoLouco() == "s") {
 			if (desenhar == "Paciente") {
 				this.louco.reposicionar();
-				this.louco.estaAndando = true;
+				NPC.estaAndando = true;
 				this.threadLouco.resume();
 			}
 		}
 		if (this.getStartadoEnfermeiro() == "s"){
 			if (desenhar == "Enfermeiro") {
 				this.enfermeiro.reposicionar();
-				this.enfermeiro.estaAndando = true;
+				NPC.estaAndando = true;
 				this.threadEnfermeiro.resume();
 			}
 		}
 		if (this.getStartadoGuarda() == "s") {
 			if(desenhar == "Guarda") {
 				this.guarda.reposicionar();
-				this.guarda.estaAndando = true;
+				NPC.estaAndando = true;
 				this.threadGuarda.resume();
 			}
 		}
@@ -404,9 +402,9 @@ public class JogoTela implements Screen {
 			this.jogar.Mostrar_opcoes(1);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();
 			this.escolheu = true;
-			//md.InserirDadosBanco(jogar);
+			md.InserirDadosBanco(jogar);
 			if (this.chegou_ao_fim == true) {
-				//md.DeletarDoBanco();
+				md.DeletarDoBanco();
 			}
 		}
 		else if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 515) {
@@ -422,9 +420,9 @@ public class JogoTela implements Screen {
 			this.jogar.Mostrar_opcoes(2);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();
 			this.escolheu = true;
-			//md.InserirDadosBanco(jogar);
+			md.InserirDadosBanco(jogar);
 			if (this.chegou_ao_fim == true) {
-				//md.DeletarDoBanco();
+				md.DeletarDoBanco();
 			}
 		}
 		else if(Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 880) {
@@ -439,9 +437,9 @@ public class JogoTela implements Screen {
 			this.jogar.Mostrar_opcoes(3);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();			
 			this.escolheu = true;
-			//md.InserirDadosBanco(jogar);
+			md.InserirDadosBanco(jogar);
 			if (this.chegou_ao_fim == true) {
-				//md.DeletarDoBanco();
+				md.DeletarDoBanco();
 			}
 		}
 	}
@@ -512,9 +510,6 @@ public class JogoTela implements Screen {
 			else if (desenhar == "Estante") {
 				this.interagirObjetos(estante);
 			}
-			else if (desenhar == "Banco") {
-				this.interagirObjetos(banco);
-			}
 			else if(desenhar == "Mesa") {
 				this.interagirObjetos(mesa);
 			}
@@ -550,7 +545,20 @@ public class JogoTela implements Screen {
 
 	public void retornarMenu() {
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-			//md.TemDadosNoBanco();
+			if (desenhar == "Medico") {
+				this.threadMedico.suspend();
+			}
+			else if (desenhar == "Paciente") {
+				this.threadLouco.suspend();
+			}
+			else if (desenhar == "Enfermeiro") {
+				this.threadEnfermeiro.suspend();
+			}
+			else if(desenhar == "Guarda") {
+				this.threadGuarda.suspend();
+			}
+			this.threadJogador.suspend();
+			md.TemDadosNoBanco();
 			this.jogo.setScreen(new MenuTela(jogo));
 		}
 	}

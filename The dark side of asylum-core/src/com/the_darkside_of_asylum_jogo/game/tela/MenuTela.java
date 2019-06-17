@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
+
 
 
 public class MenuTela implements Screen {
@@ -14,7 +16,7 @@ public class MenuTela implements Screen {
 	private The_DarkSide_of_Asylum_Jogo jogo;
 
 	//bd
-	//ManipulacaoDados md;
+	ManipulacaoDados md;
 
 	//Menu
 	private Texture fundo_menu;
@@ -49,15 +51,15 @@ public class MenuTela implements Screen {
 	public MenuTela (The_DarkSide_of_Asylum_Jogo jogo) {
 		this.jogo = jogo;
 
-		//this.md = new ManipulacaoDados();
-		//this.md.TemDadosNoBanco();
+		this.md = new ManipulacaoDados();
+		this.md.TemDadosNoBanco();
 
 		this.fundo_menu = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/fundo do menu.png");
-				
+
 		this.btn_pt = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/portugues.png"));
 		this.btn_jogar_pt = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/jogar.png"));
-		//this.btn_continuar = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/continuar.png"));
-		//this.btn_continuarI = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/continuarI.png"));
+		this.btn_continuar = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/continuar.png"));
+		this.btn_continuarI = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/continuarI.png"));
 		this.btn_idioma_pt = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/idioma.png"));
 		this.btn_historia_pt = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/historia.png"));
 
@@ -68,7 +70,7 @@ public class MenuTela implements Screen {
 
 		this.seta_dir = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/seta.png"));
 		this.seta_esq = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/seta e.png"));
-		
+
 		this.btn_com_som = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/som.png"));
 		this.btn_sem_som = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/sem_som.png"));
 		this.btn_som_aux = btn_com_som;
@@ -82,7 +84,6 @@ public class MenuTela implements Screen {
 		this.seta = new Rectangle();
 		this.seta.x = 760;
 		this.seta.y = 458;
-		
 	}
 
 	public void desenhar(int statusP) {
@@ -90,12 +91,12 @@ public class MenuTela implements Screen {
 		if (statusP == 1) {
 			this.jogo.lote.draw(fundo_menu, 0, 0);
 			this.jogo.lote.draw(btn_jogar_pt, 800, 415);
-			/*if (md.temDados) {
+			if (md.temDados) {
 				this.jogo.lote.draw(btn_continuar, 800, 313);
 			}
-			else {*/
-				//this.jogo.lote.draw(btn_continuarI, 800, 313);
-			//}
+			else {
+				this.jogo.lote.draw(btn_continuarI, 800, 313);
+			}
 			this.jogo.lote.draw(btn_idioma_pt, 800, 211);
 			this.jogo.lote.draw(btn_historia_pt, 800, 109);
 			this.jogo.lote.draw(seta_dir, seta.x, seta.y);
@@ -109,18 +110,17 @@ public class MenuTela implements Screen {
 		else if (statusP == 3) {
 			this.jogo.lote.draw(fundo_menu, 0, 0);
 			this.jogo.lote.draw(btn_jogar_en, 800, 415);
-			/*if(md.temDados) {
+			if(md.temDados) {
 				this.jogo.lote.draw(btn_continuar, 800, 313);
 			}
-			else {*/
-				//this.jogo.lote.draw(btn_continuarI, 800, 313);
-			//}
+			else {
+				this.jogo.lote.draw(btn_continuarI, 800, 313);
+			}
 
 			this.jogo.lote.draw(btn_idioma_en, 800, 211);
 			this.jogo.lote.draw(btn_historia_en, 800, 109);
 			this.jogo.lote.draw(seta_dir, seta.x, seta.y);
 		}
-		
 		this.jogo.lote.draw(btn_som_aux, btn_som.x, btn_som.y, btn_som.width, btn_som.height);
 		this.jogo.lote.end();
 	}
@@ -136,7 +136,7 @@ public class MenuTela implements Screen {
 		if (this.status_jogo == 1 ||this. status_jogo == 3) {
 			this.status_1_3();
 		} else if (this.status_jogo == 2) {
-			this.status_2();
+			status_2();
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.M) || (pontoEmRetangulo(btn_som) && Gdx.input.isTouched())) {
@@ -171,32 +171,31 @@ public class MenuTela implements Screen {
 			this.seta.y = 385;
 			this.status_jogo = 2;
 		}
-
+		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 158) {
+			this.dispose();
+			this.tocando ="parar";
+			this.jogo.setScreen(new Historia(jogo));
+			this.status_jogo = 0;
+			this.som.stop();
+		}
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 458) {
 			this.dispose();
-			//md.DeletarDoBanco();
+			md.DeletarDoBanco();
 			this.tocando ="parar";
 			this.jogo.setScreen(new JogoTela(jogo));
 			this.status_jogo = 0;
 			this.som.stop();
 		}
-		 if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 158) {
-			 this.dispose();
-			 this.tocando ="parar";
-			 this.jogo.setScreen(new Historia(jogo));
-			 this.status_jogo = 0;
-			 this.som.stop();
-		 }
 
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 358) {
-			/*if(md.temDados) {
+			if(md.temDados) {
 				this.dispose();
 				this.continuar = true;
 				this.tocando ="parar";
 				this.jogo.setScreen(new JogoTela(jogo));
 				this.status_jogo = 0;
 				this.som.stop();
-			}*/
+			}
 		}
 	}
 
