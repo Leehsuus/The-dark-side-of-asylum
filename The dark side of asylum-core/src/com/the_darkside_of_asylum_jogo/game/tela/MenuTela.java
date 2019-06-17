@@ -23,7 +23,7 @@ public class MenuTela implements Screen {
 	private Texture btn_continuar;
 	private Texture btn_continuarI;
 	private Texture btn_jogar_pt;
-	private Texture btn_idioma_pt;
+	private Texture btn_como_jogar;
 	private Texture btn_historia_pt;
 	//private Texture btn_jogar_en;
 	//private Texture btn_idioma_en;
@@ -60,7 +60,7 @@ public class MenuTela implements Screen {
 		this.btn_jogar_pt = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/jogar.png"));
 		this.btn_continuar = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/continuar.png"));
 		this.btn_continuarI = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/continuarI.png"));
-		this.btn_idioma_pt = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/idioma.png"));
+		this.btn_como_jogar = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/como_jogar.png"));
 		this.btn_historia_pt = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/historia.png"));
 
 		//this.btn_eng = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/english.png"));
@@ -98,7 +98,7 @@ public class MenuTela implements Screen {
 			else {
 				this.jogo.lote.draw(btn_continuarI, 800, 313);
 			}
-			this.jogo.lote.draw(btn_idioma_pt, 800, 211);
+			this.jogo.lote.draw(btn_como_jogar, 800, 211);
 			this.jogo.lote.draw(btn_historia_pt, 800, 109);
 			this.jogo.lote.draw(seta_dir, seta.x, seta.y);
 		} 
@@ -273,7 +273,7 @@ public class MenuTela implements Screen {
 		// TODO Auto-generated method stub
 		this.fundo_menu.dispose();
 		this.btn_jogar_pt.dispose();
-		this.btn_idioma_pt.dispose();
+		this.btn_como_jogar.dispose();
 		this.btn_historia_pt.dispose();
 		//this.btn_jogar_en.dispose();
 		//this.btn_idioma_en.dispose();
