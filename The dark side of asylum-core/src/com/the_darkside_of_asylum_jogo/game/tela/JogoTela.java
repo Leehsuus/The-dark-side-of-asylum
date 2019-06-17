@@ -16,7 +16,7 @@ public class JogoTela implements Screen {
 	private The_DarkSide_of_Asylum_Jogo jogo;
 
 	// bd 
-	private ManipulacaoDados md;
+	//private ManipulacaoDados md;
 
 	//escolhas
 	private Escolhas jogar;
@@ -86,7 +86,7 @@ public class JogoTela implements Screen {
 
 	public JogoTela(The_DarkSide_of_Asylum_Jogo jogoP) {
 		//bd
-		this.md = new ManipulacaoDados();
+		//this.md = new ManipulacaoDados();
 
 		//escolhas
 		this.jogo = jogoP;
@@ -97,9 +97,9 @@ public class JogoTela implements Screen {
 		this.seta.y = 120;
 		this.escolheu = true;
 		this.texto_escolha = jogar.getTexto_aux();
-		if (MenuTela.continuar == true) {
+		/*if (MenuTela.continuar == true) {
 			md.BuscarDados(jogar);
-		}
+		}*/
 
 		//interatividade
 		this.fundoInterativo01 = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/fundo01.png");
@@ -402,10 +402,10 @@ public class JogoTela implements Screen {
 			this.jogar.Mostrar_opcoes(1);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();
 			this.escolheu = true;
-			md.InserirDadosBanco(jogar);
-			if (this.chegou_ao_fim == true) {
+			//md.InserirDadosBanco(jogar);
+			/*if (this.chegou_ao_fim == true) {
 				md.DeletarDoBanco();
-			}
+			}*/
 		}
 		else if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 515) {
 			if (this.chegou_ao_fim) {
@@ -420,10 +420,10 @@ public class JogoTela implements Screen {
 			this.jogar.Mostrar_opcoes(2);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();
 			this.escolheu = true;
-			md.InserirDadosBanco(jogar);
-			if (this.chegou_ao_fim == true) {
+			//md.InserirDadosBanco(jogar);
+			/*if (this.chegou_ao_fim == true) {
 				md.DeletarDoBanco();
-			}
+			}*/
 		}
 		else if(Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 880) {
 			if (this.chegou_ao_fim) {
@@ -437,10 +437,10 @@ public class JogoTela implements Screen {
 			this.jogar.Mostrar_opcoes(3);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();			
 			this.escolheu = true;
-			md.InserirDadosBanco(jogar);
-			if (this.chegou_ao_fim == true) {
+			//md.InserirDadosBanco(jogar);
+			/*if (this.chegou_ao_fim == true) {
 				md.DeletarDoBanco();
-			}
+			}*/
 		}
 	}
 
@@ -558,7 +558,7 @@ public class JogoTela implements Screen {
 				this.threadGuarda.suspend();
 			}
 			this.threadJogador.suspend();
-			md.TemDadosNoBanco();
+			//md.TemDadosNoBanco();
 			this.jogo.setScreen(new MenuTela(jogo));
 		}
 	}
