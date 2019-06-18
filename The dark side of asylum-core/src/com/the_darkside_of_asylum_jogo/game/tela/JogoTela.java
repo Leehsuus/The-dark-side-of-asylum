@@ -244,12 +244,14 @@ public class JogoTela implements Screen {
 		}else if (this.chegou_ao_fim == true){
 			this.jogo.lote.begin();
 			this.fundo_final = jogar.getFundo_final();
-			this.animacao_final = jogar.getAnimacao_final();
 			this.jogo.lote.draw(this.fundo_final, pos_x_escolhas, 0);
-			if (this.animacao_f.y > -450) {
+			if (jogar.getAnimacao_final() != null){
+				this.animacao_final = jogar.getAnimacao_final();
+				if (this.animacao_f.y > -450) {
 				this.animacao_f.y -= 2;
+				}
+				this.jogo.lote.draw(this.animacao_final, 0, this.animacao_f.y);
 			}
-			this.jogo.lote.draw(this.animacao_final, 0, this.animacao_f.y);
 			this.texto_escolha = this.jogar.getTexto_aux();
 			this.jogo.lote.draw(this.texto_escolha, 40, 30);
 			this.jogo.lote.end();
