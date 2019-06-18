@@ -404,7 +404,7 @@ public class Escolhas {
 		this.matriz [29][2] = "";
 		this.matriz [29][3] = "";
 		this.matriz [29][4] = "";
-		this.matriz [29][5] = "";
+		this.matriz [29][5] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Cenarios/cadeira_eletrica.png";
 		this.matriz [29][6] = "";
 		this.matriz [29][7] = "";
 		
@@ -413,7 +413,7 @@ public class Escolhas {
 		this.matriz [30][2] = "";
 		this.matriz [30][3] = "";
 		this.matriz [30][4] = "";
-		this.matriz [30][5] = "";
+		this.matriz [30][5] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Cenarios/cadeira_eletrica.png";
 		this.matriz [30][6] = "";
 		this.matriz [30][7] = "";
 		
@@ -479,7 +479,7 @@ public class Escolhas {
 		this.matriz [36][2] = "";
 		this.matriz [36][3] = "";
 		this.matriz [36][4] = "";
-		this.matriz [36][5] = "";
+		this.matriz [36][5] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Cenarios/cadeira_eletrica.png";
 		this.matriz [36][6] = "";
 		this.matriz [36][7] = "";
 		
@@ -488,7 +488,7 @@ public class Escolhas {
 		this.matriz [37][2] = "";
 		this.matriz [37][3] = "";
 		this.matriz [37][4] = "";
-		this.matriz [37][5] = "";
+		this.matriz [37][5] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Cenarios/cadeira_eletrica.png";
 		this.matriz [37][6] = "";
 		this.matriz [37][7] = "";
 		
