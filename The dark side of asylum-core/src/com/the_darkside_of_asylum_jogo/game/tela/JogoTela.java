@@ -29,6 +29,9 @@ public class JogoTela implements Screen {
 	private boolean escolheu;
 	private boolean chegou_ao_fim;
 	private Texture texto_escolha;
+	private Texture fundo_final;
+	private Texture animacao_final;
+	private Rectangle animacao_f;
 
 	//interatividade
 	private Texture fundoInterativo01;
@@ -97,6 +100,8 @@ public class JogoTela implements Screen {
 		this.seta.y = 120;
 		this.escolheu = true;
 		this.texto_escolha = jogar.getTexto_aux();
+		this.animacao_f = new Rectangle();
+		this.animacao_f.y = 600;
 		/*if (MenuTela.continuar == true) {
 			md.BuscarDados(jogar);
 		}*/
@@ -238,7 +243,13 @@ public class JogoTela implements Screen {
 			this.jogo.lote.end();
 		}else if (this.chegou_ao_fim == true){
 			this.jogo.lote.begin();
-			this.jogo.lote.draw(this.fundo_jogo, pos_x_escolhas, 0);
+			this.fundo_final = jogar.getFundo_final();
+			this.animacao_final = jogar.getAnimacao_final();
+			this.jogo.lote.draw(this.fundo_final, pos_x_escolhas, 0);
+			if (this.animacao_f.y > -450) {
+				this.animacao_f.y -= 2;
+			}
+			this.jogo.lote.draw(this.animacao_final, 0, this.animacao_f.y);
 			this.texto_escolha = this.jogar.getTexto_aux();
 			this.jogo.lote.draw(this.texto_escolha, 40, 30);
 			this.jogo.lote.end();

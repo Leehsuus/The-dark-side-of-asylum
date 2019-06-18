@@ -2,6 +2,7 @@ package com.the_darkside_of_asylum_jogo.game.tela;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
@@ -46,6 +47,11 @@ public class Historia implements Screen{
 		else {
 			this.dispose();
 			this.jogo.setScreen(new JogoTela(jogo));
+		}
+		
+		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
+      		this.dispose();
+      		this.jogo.setScreen(new MenuTela(jogo));
 		}
 	}
 
