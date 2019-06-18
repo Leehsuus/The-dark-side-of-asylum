@@ -319,7 +319,7 @@ public class Escolhas {
 		this.matriz [22][8] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Escolhas/10-1.png";
 		this.matriz [22][9] = "Remedio";
 		this.matriz [22][10] = "Remedio";
-		this.matriz [22][11] = "Remedio";
+		this.matriz [22][11] = "Porta";
 		
 		this.matriz [23][0] = "Procurar novas evid�ncias no quarto do paciente suspeito";
 		this.matriz [23][1] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Textos/24.png";
@@ -404,27 +404,27 @@ public class Escolhas {
 		this.matriz [29][2] = "";
 		this.matriz [29][3] = "";
 		this.matriz [29][4] = "";
-		this.matriz [29][9] = "";
-		this.matriz [29][10] = "";
-		this.matriz [29][11] = "";
+		this.matriz [29][5] = "";
+		this.matriz [29][6] = "";
+		this.matriz [29][7] = "";
 		
 		this.matriz [30][0] = "Volta pra ilha com uma equipe de busca";
 		this.matriz [30][1] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Textos/31.png";
 		this.matriz [30][2] = "";
 		this.matriz [30][3] = "";
 		this.matriz [30][4] = "";
-		this.matriz [30][9] = "";
-		this.matriz [30][10] = "";
-		this.matriz [30][11] = "";
+		this.matriz [30][5] = "";
+		this.matriz [30][6] = "";
+		this.matriz [30][7] = "";
 		
 		this.matriz [31][0] = "Resolve visitar seu bar favorito";
 		this.matriz [31][1] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Textos/32.png";
 		this.matriz [31][2] = "";
 		this.matriz [31][3] = "";
 		this.matriz [31][4] = "";
-		this.matriz [31][9] = "";
-		this.matriz [31][10] = "";
-		this.matriz [31][11] = "";
+		this.matriz [31][5] = "";
+		this.matriz [31][6] = "";
+		this.matriz [31][7] = "";
 		
 		this.matriz [32][0] = "Se dirige at� ele e se senta ao seu lado";
 		this.matriz [32][1] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Textos/33.png";
@@ -479,18 +479,18 @@ public class Escolhas {
 		this.matriz [36][2] = "";
 		this.matriz [36][3] = "";
 		this.matriz [36][4] = "";
-		this.matriz [36][9] = "";
-		this.matriz [36][10] = "";
-		this.matriz [36][11] = "";
+		this.matriz [36][5] = "";
+		this.matriz [36][6] = "";
+		this.matriz [36][7] = "";
 		
 		this.matriz [37][0] = "Vai at� o suspeito";
 		this.matriz [37][1] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Textos/37.png";
 		this.matriz [37][2] = "";
 		this.matriz [37][3] = "";
 		this.matriz [37][4] = "";
-		this.matriz [37][9] = "";
-		this.matriz [37][10] = "";
-		this.matriz [37][11] = "";
+		this.matriz [37][5] = "";
+		this.matriz [37][6] = "";
+		this.matriz [37][7] = "";
 		
 		this.matriz [38][0] = "Vai encher a cara";
 		this.matriz [38][1] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Textos/38.png";
@@ -762,8 +762,10 @@ public class Escolhas {
 		}
 
 		if(matriz[this.numero_escolha][2] == ""){
-			this.fundo_final = this.Consultar_imagem(matriz[this.numero_escolha][5]);
-			this.animacao_final = this.Consultar_imagem(matriz[this.numero_escolha][6]);
+			if (matriz[this.numero_escolha][5] != "") {
+				this.fundo_final = this.Consultar_imagem(matriz[this.numero_escolha][5]);
+				this.animacao_final = this.Consultar_imagem(matriz[this.numero_escolha][6]);
+			}
 			return true;
 		}
 		else{

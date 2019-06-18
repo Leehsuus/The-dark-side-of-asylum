@@ -9,6 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1043;
 		config.height = 553;
+		config.title = "The Dark Side of Asylum";
 		new LwjglApplication(new The_DarkSide_of_Asylum_Jogo(), config);
 				
 	}
