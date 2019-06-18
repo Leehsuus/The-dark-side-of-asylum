@@ -422,7 +422,7 @@ public class Escolhas {
 		this.matriz [31][2] = "";
 		this.matriz [31][3] = "";
 		this.matriz [31][4] = "";
-		this.matriz [31][5] = "";
+		this.matriz [31][5] = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Cenarios/bar.png";
 		this.matriz [31][6] = "";
 		this.matriz [31][7] = "";
 
