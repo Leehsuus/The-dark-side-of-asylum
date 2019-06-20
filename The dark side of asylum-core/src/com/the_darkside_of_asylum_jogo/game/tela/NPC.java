@@ -2,21 +2,28 @@ package com.the_darkside_of_asylum_jogo.game.tela;
 
 import java.util.Random;
 
-
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 
 
+
+
+
 public class NPC extends Personagens implements Runnable{
 	private String qualNpc;
-	
+
 	private String direcao;
 	private Random aleatorio;
 	private int direcaoAleatorio;
-	
+
 	private float delta;
+	
 	public static boolean estaAndando;
 
+	//Construtor
 	public NPC(JogoTela telaP, String caminhoP, String qualNpcP, int larguraPersonagemPixelP,int  alturaPersonagemPixelP,int limiteLarguraTelaP, int limiteAlturaTelaP) {
 		super(telaP, caminhoP, limiteAlturaTela - alturaPersonagemPixelP * 3, larguraPersonagemPixelP, alturaPersonagemPixelP, limiteLarguraTelaP, limiteAlturaTelaP );
 		this.aleatorio = new Random();
@@ -30,6 +37,7 @@ public class NPC extends Personagens implements Runnable{
 		estaAndando = true;
 	}
 
+	//Run Thread
 	public void run() {
 		while (true){
 			this.setEstadoTempo(this.getEstadoTempo() + getDelta());
@@ -39,42 +47,60 @@ public class NPC extends Personagens implements Runnable{
 			catch(InterruptedException e){
 
 			}
+
 			if (estaAndando) {
-			this.andar();
-			colisao.mover(this.getPosX(), this.getPosY());
+				this.andar();
+				colisao.mover(this.getPosX(), this.getPosY());
+				if(this.getColisao().colideCom(JogoTela.jogador.getColisao())){
+					this.estaAndando = false;
+				}
 			}
 		}
 	}
 
+	//Pegar a identificação do personagem
 	public String getQualNpc() {
 		return qualNpc;
 	}
 
+	//Passar a identificação do personagem
 	public void setQualNpc(String qualNpcP) {
 		this.qualNpc = qualNpcP;
 	}
-	
+
+	//Pegar direção do personagem
 	public String getDirecao() {
 		return direcao;
 	}
 
+	//Passar a direção do personagem
 	public void setDirecao(String direcaoP) {
 		this.direcao = direcaoP;
 	}
-	
+
+	//Pegar a direção inicial aleatoria
 	public int getDirecaoAleatorio() {
 		return direcaoAleatorio;
 	}
 
+	//Passar a direção inicial aleatoria
 	public void setDirecaoAleatorio(int direcaoAleatorioP) {
 		this.direcaoAleatorio = direcaoAleatorioP;
 	}
-	
+
+	//reposicionar o personagem
 	public void reposicionar() {
 		this.setPosX(The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - larguraPersonagem /2); 
 		this.setPosY(this.limiteAlturaTela - this.alturaPersonagem);
+		this.estaAndando = true;
+		if (this.getDirecaoAleatorio() == 0) {
+			this.setDirecao("Esquerda");}
+		else {
+			this.setDirecao("Direita");
+		}
 	}
-	
+
+	//Pegar imagem de acordo com o seu estado e direção
 	public TextureRegion pegarImagem(float deltaP) {
 		estadoAtual = pegarStado();
 
@@ -94,6 +120,7 @@ public class NPC extends Personagens implements Runnable{
 		return region;
 	}
 
+	//Pegar o estado em que o personagem se encontra
 	public Estado pegarStado() {
 		if ((this.getPosX() > 0 && this.getPosX() < limiteLarguraTela - larguraPersonagem || this.getPosY() > 0 && this.getPosY() < limiteAlturaTela - alturaPersonagem) && estaAndando) {
 			return Estado.CORRENDO;
@@ -104,14 +131,17 @@ public class NPC extends Personagens implements Runnable{
 		}
 	}
 
+	//Pegar delta tempo
 	public float getDelta() {
 		return delta;
 	}
-
+	
+	//Pegar delta tempo
 	public void setDelta(float deltaP) {
 		this.delta = deltaP;
 	}
 
+	//Movimentação do personagem
 	public void andar() {
 		if(this.getQualNpc() == "Medico"|| this.getQualNpc() == "Enfermeiro" || this.getQualNpc() == "Guarda") {
 			if(this.getDirecao() == "Direita") {
@@ -159,6 +189,7 @@ public class NPC extends Personagens implements Runnable{
 		}
 	}
 
+	//Trocar a direção do de qualquer personagem exceto o paciente
 	public void trocarDirecao(){
 		if (this.getPosX() == 0.0) {
 			this.setDirecao("Direita");
@@ -168,6 +199,7 @@ public class NPC extends Personagens implements Runnable{
 		}
 	}
 
+	//Trocar a direção do personagem escifico para o paciente
 	public void trocarDirecaoLouco(){
 		//saindo
 		if(this.getPosX() == 0.0 && this.getPosY() == limiteAlturaTela - alturaPersonagem) {
@@ -353,24 +385,28 @@ public class NPC extends Personagens implements Runnable{
 
 	}
 
+	//Movimentar para diagonal esquerda com baixo
 	public void andarParaDiagonalEsquerdaBaixo() {
 		this.andarParaEsquerda();
 		this.andarParaBaixo();
 	}
 
+	//Movimentar para diagonal esquerda com cima
 	public void andarParaDiagonalEsquerdaCima() {
 		this.andarParaEsquerda();
 		this.andarParaCima();
 	}
 
+	//Movimentar para diagonal direita com baixo
 	public void andarParaDiagonalDireitaBaixo() {
 		this.andarParaDireita();
 		this.andarParaBaixo();
 	}
 
+	//Movimentar para diagonal direita com cima
 	public void andarParaDiagonalDireitaCima() {
 		this.andarParaDireita();
 		this.andarParaCima();
 	}
-	
+
 }

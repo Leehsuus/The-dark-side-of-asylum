@@ -42,7 +42,7 @@ public class JogoTela implements Screen {
 	public static String direcaoXJogador;
 	private boolean teclasOpostas;
 	private String startadoJogador;
-	
+
 	public static NPC medico;
 	private Thread threadMedico;
 	private String startadoMedico;
@@ -51,42 +51,46 @@ public class JogoTela implements Screen {
 	private Thread threadLouco;
 	private String startadoLouco;
 
-	public static Objetos porta;
-
 	public static NPC enfermeiro; 
 	private Thread threadEnfermeiro;
 	private String startadoEnfermeiro;
-
-	public static Objetos cafe;
 
 	public static NPC guarda; 
 	private Thread threadGuarda;
 	private String startadoGuarda;
 
+	public static Objetos porta;
+	public static Objetos cafe;
 	public static Objetos cigarro;
-
 	public static Objetos bebida;
-
 	public static Objetos parede;
-
 	public static Objetos cama;
-
 	public static Objetos remedio;
-
 	public static Objetos estante;
-
 	public static Objetos mesa;
-	
 	public static Objetos estante2;
-	
 	public static Objetos armario;
 
 	public static String desenhar;
 
+	private Som mastigarSom;
+	private String startadoMastigar;
+	private Som passosSom;
+	private String startadoPassos;
+	private Som portaSom;
+	private String startadoPorta;
+	private Som gritoSom;
+	private String startadoGrito;
+
+	private String pausarMastigar;
+	private String pausarPassos;
+	private String pausarPorta;
+	private String pausarGrito;
+
 	//maquina de estado
 	public int estado;
 
-
+	//Construtor
 	public JogoTela(The_DarkSide_of_Asylum_Jogo jogoP) {
 		//bd
 		//this.md = new ManipulacaoDados();
@@ -102,9 +106,9 @@ public class JogoTela implements Screen {
 		this.texto_escolha = jogar.getTexto_aux();
 		this.animacao_f = new Rectangle();
 		this.animacao_f.y = 600;
-		/*if (MenuTela.continuar == true) {
-			md.BuscarDados(jogar);
-		}*/
+		if (MenuTela.continuar == true) {
+			//md.BuscarDados(jogar);
+		}
 
 		//interatividade
 		this.fundoInterativo01 = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/fundo01.png");
@@ -143,9 +147,9 @@ public class JogoTela implements Screen {
 		this.mesa = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Mesa.png", 65, 78, 250, (The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - 65 /2));
 
 		this.estante2 = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Estante2.png", 60,60, 230, (400 - 60 /2));
-		
+
 		this.armario = new Objetos(this, "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Interativos/Armario.png", 130, 150, 320,(140 - 130 /2));
-		
+
 		this.setTeclasOpostas(false);
 		this.setStartadoJogador("n");
 		this.setStartadoMedico("n");
@@ -153,27 +157,55 @@ public class JogoTela implements Screen {
 		this.setStartadoEnfermeiro("n");
 		this.setStartadoGuarda("n");
 
+		this.mastigarSom = new Som();
+		this.mastigarSom.tocar("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Musica/MASTIGAÇÃO.mp3", false);
+		this.mastigarSom.setTocando("tocar");
+		this.passosSom = new Som();
+		this.passosSom.tocar("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Musica/PASSOS.mp3", false);
+		this.passosSom.setTocando("tocar");
+		this.portaSom = new Som();
+		this.portaSom.tocar("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Musica/PORTA.mp3", false);
+		this.portaSom.setTocando("tocar");
+		this.gritoSom = new Som();
+		this.gritoSom.tocar("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Musica/SONS DE GRITO.mp3", false);
+		this.gritoSom.setTocando("tocar");
+		
+		this.setStartadoMastigar("n");
+		this.setStartadoPassos("n");
+		this.setStartadoPorta("n");
+		this.setStartadoGrito("n");
+		
+		this.setPausarMastigar("n");
+		this.setPausarPassos("n");
+		this.setPausarPorta("n");
+		this.setPausarGrito("n");
+		
 		//maquina de estado
 		this.setEstado(1);
 
 	}
 
+	//Pegar teclas oposta
 	public boolean isTeclasOpostas() {
 		return teclasOpostas;
 	}
 
+	//Passar teclas oposta
 	public void setTeclasOpostas(boolean teclasOpostasP) {
 		this.teclasOpostas = teclasOpostasP;
 	}
 
+	//Pegar Estado
 	public int getEstado() {
 		return estado;
 	}
 
+	//Passar Estado
 	public void setEstado(int estadoP) {
 		this.estado = estadoP;
 	}
 
+	
 	public String getStartadoJogador() {
 		return startadoJogador;
 	}
@@ -181,7 +213,7 @@ public class JogoTela implements Screen {
 	public void setStartadoJogador(String startadoJogadorP) {
 		this.startadoJogador = startadoJogadorP;
 	}
-	
+
 	public String getStartadoMedico() {
 		return startadoMedico;
 	}
@@ -214,6 +246,73 @@ public class JogoTela implements Screen {
 		this.startadoGuarda = startadoGuarda;
 	}
 
+	public String getStartadoMastigar() {
+		return startadoMastigar;
+	}
+
+	public void setStartadoMastigar(String startadoMastigar) {
+		this.startadoMastigar = startadoMastigar;
+	}
+
+	public String getStartadoPassos() {
+		return startadoPassos;
+	}
+
+	public void setStartadoPassos(String startadoPassos) {
+		this.startadoPassos = startadoPassos;
+	}
+
+	public String getStartadoPorta() {
+		return startadoPorta;
+	}
+
+	public void setStartadoPorta(String startadoPorta) {
+		this.startadoPorta = startadoPorta;
+	}
+
+	public String getStartadoGrito() {
+		return startadoGrito;
+	}
+
+	public void setStartadoGrito(String startadoGrito) {
+		this.startadoGrito = startadoGrito;
+	}
+
+	public String getPausarMastigar() {
+		return pausarMastigar;
+	}
+
+	public void setPausarMastigar(String pausarMastigar) {
+		this.pausarMastigar = pausarMastigar;
+	}
+
+	public String getPausarPassos() {
+		return pausarPassos;
+	}
+
+	public void setPausarPassos(String pausarPassos) {
+		this.pausarPassos = pausarPassos;
+	}
+
+	public String getPausarPorta() {
+		return pausarPorta;
+	}
+
+	public void setPausarPorta(String pausarPorta) {
+		this.pausarPorta = pausarPorta;
+	}
+	
+	//Pegar variavel que controla o som do grito
+	public String getPausarGrito() {
+		return pausarGrito;
+	}
+
+	//Passar varivel que controla o som do grito
+	public void setPausarGrito(String pausarGrito) {
+		this.pausarGrito = pausarGrito;
+	}
+
+	//Desenhar parte de escolha do jogo
 	public void desenharEscolhas() {
 		int pos_x_escolhas = 0;
 		int pos_y_escolhas = 50;
@@ -248,7 +347,7 @@ public class JogoTela implements Screen {
 			if (jogar.getAnimacao_final() != null){
 				this.animacao_final = jogar.getAnimacao_final();
 				if (this.animacao_f.y > -450) {
-				this.animacao_f.y -= 2;
+					this.animacao_f.y -= 2;
 				}
 				this.jogo.lote.draw(this.animacao_final, 0, this.animacao_f.y);
 			}
@@ -258,6 +357,7 @@ public class JogoTela implements Screen {
 		}
 	}
 
+	//Desenhar parte interativa do jogo
 	public void desenharIteratividade(float deltaP) {
 		this.jogo.lote.begin();
 		this.jogo.lote.draw(fundoInterativo01, 0, 0, The_DarkSide_of_Asylum_Jogo.LARGURA_TELA, The_DarkSide_of_Asylum_Jogo.ALTURA_TELA);
@@ -274,7 +374,6 @@ public class JogoTela implements Screen {
 		}
 		else if(desenhar == "Enfermeiro") {
 			this.sobreposicao(deltaP, enfermeiro);
-
 		}
 		else if(desenhar == "Cafe") {
 			this.jogo.lote.draw(this.cafe.getImagem(),this. cafe.getPosX(), this.cafe.getPosY(), this.cafe.larguraItem, this.cafe.alturaItem);
@@ -316,9 +415,19 @@ public class JogoTela implements Screen {
 			this.jogo.lote.draw(this.mesa.getImagem(),this. mesa.getPosX(), this.mesa.getPosY(), this.mesa.larguraItem, this.mesa.alturaItem);
 			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
 		}
+		else if (desenhar == "Ignorar") {
+			this.jogo.lote.draw(this.porta.getImagem(),this. porta.getPosX(), this.porta.getPosY(), this.porta.larguraItem, this.porta.alturaItem);			
+			this.jogo.lote.draw(this.remedio.getImagem(),this. remedio.getPosX(), this.remedio.getPosY(), this.remedio.larguraItem, this.remedio.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
+		else if(desenhar == "Guardar") {
+			this.jogo.lote.draw(this.remedio.getImagem(),this. remedio.getPosX(), this.remedio.getPosY(), this.remedio.larguraItem, this.remedio.alturaItem);
+			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
+		}
 		this.jogo.lote.end();
 	}
 
+	//Sobreposição para desenhar personagens
 	public void sobreposicao(float deltaP, NPC npcP) {
 		if( this.jogador.getPosY() >= npcP.getPosY()) {
 			this.jogo.lote.draw(this.jogador.pegarImagem(deltaP), this.jogador.getPosX(), this.jogador.getPosY(), this.jogador.larguraPersonagem, this.jogador.alturaPersonagem);
@@ -330,6 +439,7 @@ public class JogoTela implements Screen {
 		}
 	}
 
+	//Starta a thread ou  resume
 	public void threadStartado() {
 		if (this.getStartadoMedico() == "n") {
 			if (desenhar == "Medico") {
@@ -350,7 +460,7 @@ public class JogoTela implements Screen {
 			}
 		}
 		if(this.getStartadoGuarda() == "n") {
-			 if(desenhar == "Guarda") {
+			if(desenhar == "Guarda") {
 				this.threadGuarda.start();
 				this.setStartadoGuarda("s");
 			}
@@ -362,28 +472,24 @@ public class JogoTela implements Screen {
 		if (this.getStartadoMedico() == "s") {
 			if (desenhar == "Medico") {
 				this.medico.reposicionar();
-				NPC.estaAndando = true;
 				this.threadMedico.resume();
 			}
 		}
 		if (this.getStartadoLouco() == "s") {
 			if (desenhar == "Paciente") {
 				this.louco.reposicionar();
-				NPC.estaAndando = true;
 				this.threadLouco.resume();
 			}
 		}
 		if (this.getStartadoEnfermeiro() == "s"){
 			if (desenhar == "Enfermeiro") {
 				this.enfermeiro.reposicionar();
-				NPC.estaAndando = true;
 				this.threadEnfermeiro.resume();
 			}
 		}
 		if (this.getStartadoGuarda() == "s") {
 			if(desenhar == "Guarda") {
 				this.guarda.reposicionar();
-				NPC.estaAndando = true;
 				this.threadGuarda.resume();
 			}
 		}
@@ -393,7 +499,18 @@ public class JogoTela implements Screen {
 			this.threadJogador.resume();
 		}
 	}
-	
+
+	//Parar sons
+	public void pararSonsCurtos(){
+		if (this.getPausarMastigar() == "s") {
+			this.mastigarSom.setTocando("parar");
+			this.setPausarMastigar("n");}
+		if(this.getPausarPorta() == "s") {
+			this.portaSom.setTocando("parar");
+			this.setPausarPorta("n");}
+	}
+
+	//Pegar eventos do movimento da escolha
 	@SuppressWarnings("deprecation")
 	public void escolher() {
 		if (Gdx.input.isKeyJustPressed(Keys.RIGHT) && (this.seta.x == 150 || this.seta.x == 515)) {
@@ -412,13 +529,14 @@ public class JogoTela implements Screen {
 				this.setEstado(2);
 			}
 			this.threadStartado();
+			this.pararSonsCurtos();
 			this.jogar.Mostrar_opcoes(1);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();
 			this.escolheu = true;
 			//md.InserirDadosBanco(jogar);
-			/*if (this.chegou_ao_fim == true) {
-				md.DeletarDoBanco();
-			}*/
+			if (this.chegou_ao_fim == true) {
+				//md.DeletarDoBanco();
+			}
 		}
 		else if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 515) {
 			if (this.chegou_ao_fim) {
@@ -428,15 +546,16 @@ public class JogoTela implements Screen {
 				this.desenhar = this.jogar.Consultar_Oque_Desenhar(2);
 				this.setEstado(2);
 			}
-			
+
 			this.threadStartado();
+			this.pararSonsCurtos();
 			this.jogar.Mostrar_opcoes(2);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();
 			this.escolheu = true;
 			//md.InserirDadosBanco(jogar);
-			/*if (this.chegou_ao_fim == true) {
-				md.DeletarDoBanco();
-			}*/
+			if (this.chegou_ao_fim == true) {
+				//md.DeletarDoBanco();
+			}
 		}
 		else if(Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.x == 880) {
 			if (this.chegou_ao_fim) {
@@ -447,16 +566,18 @@ public class JogoTela implements Screen {
 				this.setEstado(2);
 			}
 			this.threadStartado();
+			this.pararSonsCurtos();
 			this.jogar.Mostrar_opcoes(3);
 			this.chegou_ao_fim = this.jogar.Consultar_texto();			
 			this.escolheu = true;
 			//md.InserirDadosBanco(jogar);
-			/*if (this.chegou_ao_fim == true) {
-				md.DeletarDoBanco();
-			}*/
+			if (this.chegou_ao_fim == true) {
+				//md.DeletarDoBanco();
+			}
 		}
 	}
 
+	//Pegar eventos do movimento do heroi
 	public void capturarMovimentosHeroi() {
 		if(Gdx.input.isKeyPressed(Keys.DOWN) && !this.isTeclasOpostas())  {
 			this.direcaoYJogador = "Baixo";
@@ -492,6 +613,15 @@ public class JogoTela implements Screen {
 			}
 
 			else if(desenhar == "Porta") {
+				if (this.getStartadoPorta() == "n") {
+					this.portaSom.start();
+					this.setStartadoPorta("s");
+					this.setPausarPorta("s");
+				}
+				else if(this.getStartadoPorta() == "s") {
+					this.portaSom.setTocando("retornar");
+					this.setPausarPorta("s");
+				}
 				this.interagirObjetos(porta);
 			}
 			else if(desenhar == "Enfermeiro") {
@@ -518,6 +648,15 @@ public class JogoTela implements Screen {
 				this.interagirObjetos(cama);
 			}
 			else if (desenhar == "Remedio") {
+				if (this.getStartadoMastigar() == "n") {
+					this.mastigarSom.start();
+					this.setStartadoMastigar("s");
+					this.setPausarMastigar("s");
+				}
+				else if(this.getStartadoMastigar() == "s") {
+					this.mastigarSom.setTocando("retornar");
+					this.setPausarMastigar("s");
+				}
 				this.interagirObjetos(remedio);
 			}
 			else if (desenhar == "Estante") {
@@ -526,10 +665,26 @@ public class JogoTela implements Screen {
 			else if(desenhar == "Mesa") {
 				this.interagirObjetos(mesa);
 			}
+			else if(desenhar =="Ignorar") {
+				if (this.getStartadoPorta() == "n") {
+					this.portaSom.start();
+					this.setStartadoPorta("s");
+					this.setPausarPorta("s");
+				}
+				else if(this.getStartadoPorta() == "s") {
+					this.portaSom.setTocando("retornar");
+					this.setPausarPorta("s");
+				}
+				this.interagirObjetos(porta);
+			}
+			else if(desenhar == "Guardar") {
+				this.interagirObjetos(remedio);
+			}
 		}
 
 	}
 
+	//Interagir com objetos
 	public void interagirObjetos(Objetos objetosP) {
 		if(jogador.getColisao().colideCom(objetosP.getColisao())) {
 			this.setEstado(1);
@@ -537,6 +692,7 @@ public class JogoTela implements Screen {
 		}
 	}
 
+	//Interagir com NPCs
 	public void interagirNPC(NPC npcP) {
 		if(jogador.getColisao().colideCom(npcP.getColisao())) {
 			this.setEstado(1);
@@ -556,6 +712,7 @@ public class JogoTela implements Screen {
 		}
 	}
 
+	//Retornar ao menu
 	public void retornarMenu() {
 		if(Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
 			if (desenhar == "Medico") {
@@ -570,6 +727,8 @@ public class JogoTela implements Screen {
 			else if(desenhar == "Guarda") {
 				this.threadGuarda.suspend();
 			}
+			this.mastigarSom.setTocando("Parar");
+			this.portaSom.setTocando("Parar");
 			this.threadJogador.suspend();
 			//md.TemDadosNoBanco();
 			this.jogo.setScreen(new MenuTela(jogo));

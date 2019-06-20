@@ -13,19 +13,15 @@ public class ManipulacaoDados {
 	public static PreparedStatement stmt;
 	public static boolean temDados = false; 
 
+	//Inserir dados no banco de dados
 	public void InserirDadosBanco(Escolhas escolhaP){
 
 		String sql = "INSERT INTO SALVAR(ID_SALVAR,ESCOLHA,DATA_ESCOLHA) VALUES(SEQ_SALVAR.NEXTVAL,?,TO_CHAR(SYSDATE,'DD-MM-YYYY HH24:MI:SS'))";
 
 		try {			
-			//conectando a base
 			con = ConexaoBD.getConnection();
-			//cria statement
 			stmt = con.prepareStatement(sql);
-
-			//preenche os valores
 			stmt.setString(1, escolhaP.getNome_escolha());
-			//executa
 			stmt.execute();
 			stmt.close();
 			con.close();
@@ -36,6 +32,7 @@ public class ManipulacaoDados {
 		}
 	}
 
+	//Buscar dados no banco de dados
 	public void BuscarDados(Escolhas escolhaP){
 		String sql = "SELECT ESCOLHA FROM \r\n" + 
 				"(\r\n" + 
@@ -61,7 +58,7 @@ public class ManipulacaoDados {
 		}
 	} 
 
-
+	//Deletar dados no banco de dados
 	public void DeletarDoBanco(){
 		String sql = "DELETE FROM SALVAR";
 		try {
@@ -75,6 +72,7 @@ public class ManipulacaoDados {
 		}	
 	}
 	
+	//Verificar se tem dados no banco de dados
 	public void TemDadosNoBanco() {
 		String sql = "SELECT ESCOLHA FROM \r\n" + 
 				"(\r\n" + 

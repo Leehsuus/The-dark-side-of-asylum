@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConexaoBD {
+	//Testar a verificação da conexão com o banco de dados
 	public static Connection getConnection()throws SQLException{
 		try{
 			Class.forName("oracle.jdbc.OracleDriver");
@@ -14,3 +15,4 @@ public class ConexaoBD {
 		}
 	}
 }
+

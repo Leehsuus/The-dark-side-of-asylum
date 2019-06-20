@@ -8,13 +8,15 @@ import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
 
 
 public class Heroi extends Personagens implements Runnable{
-	
+
 	private float delta;
 
+	//construtor
 	public Heroi(JogoTela telaP, String caminhoP, int larguraPersonagemPixelP,int  alturaPersonagemPixelP, int limiteLarguraTelaP,int limiteAlturaTelaP){
 		super(telaP, caminhoP, 15, larguraPersonagemPixelP, alturaPersonagemPixelP, limiteLarguraTelaP, limiteAlturaTelaP); 
 	}
 
+	//Run Thread
 	public void run() {
 		while(true) {
 			this.setEstadoTempo(this.getEstadoTempo() + this.getDelta());
@@ -49,7 +51,6 @@ public class Heroi extends Personagens implements Runnable{
 			}
 			else if(JogoTela.desenhar == "Enfermeiro") {
 				this.colidiu(JogoTela.enfermeiro.getColisao());
-
 			}
 			else if(JogoTela.desenhar == "Cafe") {
 				this.colidiu(JogoTela.cafe.getColisao());
@@ -83,12 +84,30 @@ public class Heroi extends Personagens implements Runnable{
 			else if(JogoTela.desenhar == "Mesa") {
 				this.colidiu(JogoTela.mesa.getColisao());
 			}
+			else if(JogoTela.desenhar == "Ignorar") {
+				this.colidiu(JogoTela.porta.getColisao());
+				this.colidiu(JogoTela.remedio.getColisao());
+			}
+			else if(JogoTela.desenhar == "Guardar") {
+				this.colidiu(JogoTela.remedio.getColisao());
+			}
 			colisao.mover(this.getPosX(), this.getPosY());
 			
 		}
 
 	}
 
+	//Pegar delta tempo
+	public float getDelta() {
+		return delta;
+	}
+
+	//Passar o delta tempo
+	public void setDelta(float deltaP) {
+		this.delta = deltaP;
+	}
+	
+	//Pegar a imagen do heroi de acordo com a sua direção
 	public TextureRegion pegarImagem(float deltaP) {
 		estadoAtual = pegarStado();
 
@@ -108,6 +127,7 @@ public class Heroi extends Personagens implements Runnable{
 		return region;
 	}
 
+	//Pegar o estado do heroi (movimentado ou parado) 
 	public Estado pegarStado() {
 		if (Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.DOWN) || Gdx.input.isKeyPressed(Keys.RIGHT) ) {
 			if ((Gdx.input.isKeyPressed(Keys.UP) && Gdx.input.isKeyPressed(Keys.DOWN)) || (Gdx.input.isKeyPressed(Keys.LEFT) &&  Gdx.input.isKeyPressed(Keys.RIGHT))) {
@@ -122,16 +142,8 @@ public class Heroi extends Personagens implements Runnable{
 		}
 
 	}
-
-	public float getDelta() {
-		return delta;
-	}
-
-	public void setDelta(float deltaP) {
-		this.delta = deltaP;
-	}
 	
-	
+	//Reposicionar o heroi
 	public void reposicionar() {
 		this.setPosX(The_DarkSide_of_Asylum_Jogo.LARGURA_TELA / 2 - larguraPersonagem /2); 
 		this.setPosY(15);

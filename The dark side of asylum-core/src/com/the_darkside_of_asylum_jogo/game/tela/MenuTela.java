@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.the_darkside_of_asylum_jogo.game.The_DarkSide_of_Asylum_Jogo;
+
 
 
 
@@ -25,7 +27,6 @@ public class MenuTela implements Screen {
 	private Texture btn_jogar_pt;
 	private Texture btn_como_jogar;
 	private Texture btn_historia_pt;
-	private Texture btn_pt;
 	private Texture seta_dir;
 	private Texture btn_com_som;
 	private Texture btn_sem_som;
@@ -33,16 +34,15 @@ public class MenuTela implements Screen {
 
 	private int status_jogo = 1;
 
-	private String local_musica = "/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Musica/Musica_menu.mp3";
-	private Som som = new Som();
-	public static String tocando = ""; 
+
+	private Som som_menu = new Som();
 	public static boolean clicado;
 
 	private Rectangle seta;
 	private Rectangle btn_som;
 
 	public static boolean continuar = false; 
-
+	//construtor
 	public MenuTela (The_DarkSide_of_Asylum_Jogo jogo) {
 		this.jogo = jogo;
 
@@ -51,7 +51,6 @@ public class MenuTela implements Screen {
 
 		this.fundo_menu = new Texture("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/fundo do menu.png");
 
-		this.btn_pt = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/portugues.png"));
 		this.btn_jogar_pt = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/jogar.png"));
 		this.btn_continuar = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/continuar.png"));
 		this.btn_continuarI = new Texture(Gdx.files.internal("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Imagens/Menu/continuarI.png"));
@@ -74,7 +73,7 @@ public class MenuTela implements Screen {
 		this.seta.x = 760;
 		this.seta.y = 458;
 	}
-
+	//desenhar opções do menu
 	public void desenhar(int statusP) {
 		this.jogo.lote.begin();
 		if (statusP == 1) {
@@ -93,28 +92,27 @@ public class MenuTela implements Screen {
 		this.jogo.lote.draw(btn_som_aux, btn_som.x, btn_som.y, btn_som.width, btn_som.height);
 		this.jogo.lote.end();
 	}
-
+	//capturar interação do mouse com o botão de som
 	public boolean pontoEmRetangulo(Rectangle rectP) {
 		int mouse_X = Gdx.input.getX();
 		int mouse_Y = The_DarkSide_of_Asylum_Jogo.ALTURA_TELA - Gdx.input.getY();
 		return (mouse_X < rectP.x + rectP.width && mouse_X > rectP.x) && ( mouse_Y < rectP.y + rectP.height && mouse_Y > rectP.y);
 	}
-
+	//eventos do jogador na tela do menu
 	public void eventos(){
 
 		if (this.status_jogo == 1 ||this. status_jogo == 3) {
 			this.status_1_3();
 		}
-
 		if (Gdx.input.isKeyJustPressed(Keys.M) || (pontoEmRetangulo(btn_som) && Gdx.input.isTouched())) {
 			if(this.clicado) {
 				this.clicado = false;
-				if((this.tocando == "tocar"|this.tocando == "retonar") && this.btn_som_aux == this.btn_com_som) {
-					this.tocando = "parar";
+				if((this.som_menu.getTocando() == "tocar"|this.som_menu.getTocando() == "retonar") && this.btn_som_aux == this.btn_com_som) {
+					this.som_menu.setTocando("parar");
 					this.btn_som_aux = this.btn_sem_som;
 				}
-				else if (this.tocando == "parar"){
-					this.tocando = "retornar";
+				else if (this.som_menu.getTocando() =="parar"){
+					this.som_menu.setTocando("retornar");
 					this.btn_som_aux = this.btn_com_som;
 				}
 			}
@@ -123,7 +121,7 @@ public class MenuTela implements Screen {
 			this.clicado = true;
 		}
 	}
-	
+	// eventos de movimentação das setas no menu
 	public void status_1_3 () {
 		if (Gdx.input.isKeyJustPressed(Keys.DOWN) && (this.seta.y == 458 ||this. seta.y == 358|| this.seta.y == 258)) {
 			this.seta.y -= 100;
@@ -135,52 +133,55 @@ public class MenuTela implements Screen {
 
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 258) {
 			this.dispose();
-			this.tocando ="parar";
+			this.som_menu.setTocando("parar");
 			this.jogo.setScreen(new ComoJogar(jogo));
 			this.status_jogo = 0;
-			this.som.stop();
+			this.som_menu.stop();
 		}
-		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 158) {
-			this.dispose();
-			this.tocando ="parar";
-			this.jogo.setScreen(new Historia(jogo));
-			this.status_jogo = 0;
-			this.som.stop();
-		}
+
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 458) {
 			this.dispose();
 			//md.DeletarDoBanco();
-			this.tocando ="parar";
+			this.som_menu.setTocando("parar");
 			this.jogo.setScreen(new JogoTela(jogo));
 			this.status_jogo = 0;
-			this.som.stop();
+			this.som_menu.stop();
+		}
+		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 158) {
+			this.dispose();
+			this.som_menu.setTocando("parar");
+			this.jogo.setScreen(new Historia(jogo));
+			this.status_jogo = 0;
+			this.som_menu.stop();
 		}
 
 		if (Gdx.input.isKeyJustPressed(Keys.ENTER) && this.seta.y == 358) {
 			/*if(md.temDados) {
 				this.dispose();
 				this.continuar = true;
-				this.tocando ="parar";
+				this.som_menu.setTocando("parar");
 				this.jogo.setScreen(new JogoTela(jogo));
 				this.status_jogo = 0;
-				this.som.stop();
+				this.som_menu.stop();
 			}*/
 		}
 	}
 
+	// manipulação do som
 	@Override
 	public void show() {
-		this.som.tocar(local_musica);
+		// TODO Auto-generated method stub
+		this.som_menu.tocar("/home/leticia/git/The-dark-side-of-asylum/The dark side of asylum-core/assets/Musica/Musica_menu.mp3",  true);
 		try {
-			this.tocando = "tocar";
-			this.som.start();
+			this.som_menu.setTocando("tocar");
+			this.som_menu.start();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 
 	}
-
+	//renderização
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
@@ -191,36 +192,36 @@ public class MenuTela implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void pause() {
-		
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void resume() {
-		
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void hide() {
+		// TODO Auto-generated method stub
 
 	}
-
+	//encerramento das imagens depois de utilizadas
 	@Override
 	public void dispose() {
+		// TODO Auto-generated method stub
 		this.fundo_menu.dispose();
 		this.btn_jogar_pt.dispose();
 		this.btn_como_jogar.dispose();
 		this.btn_historia_pt.dispose();
-		this.btn_pt.dispose();
 		this.seta_dir.dispose();
-		
 	}
 
 }
